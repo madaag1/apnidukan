@@ -1,4 +1,4 @@
-// Shared Firebase initialization for Apni Dukan
+// Shared Firebase initialization for Apni Dukaan
 // Loaded as an ES module by both admin.js and script.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
@@ -9,7 +9,8 @@ import {
   signInWithPopup,
   RecaptchaVerifier,
   signInWithPhoneNumber,
-  onAuthStateChanged
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
   getFirestore,
@@ -57,5 +58,6 @@ export {
   signInWithPopup,
   RecaptchaVerifier,
   signInWithPhoneNumber,
-  onAuthStateChanged
+  onAuthStateChanged,
+  signOut
 };

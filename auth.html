@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Sign in or create your Apni Dukaan account." />
+  <title>Sign in | Apni Dukaan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="simple-header"><a class="brand-link" href="index.html">APNI DUKAAN <span>Premium lifestyle store</span></a><a class="header-link" href="cart.html">Cart <span class="cart-count" data-cart-count>0</span></a></header>
+  <main class="auth-layout">
+    <section class="auth-intro"><p class="eyebrow">Member access</p><h1>Everything you love, in one place.</h1><p>Sign in to save your delivery details and complete your order with ease.</p><a href="index.html" class="text-link">â† Continue shopping</a></section>
+    <section class="auth-card">
+      <div id="signedInView" class="hidden"><p class="eyebrow">You are signed in</p><h2 id="signedInName">Welcome back</h2><p id="signedInEmail" class="muted-copy"></p><div class="stack-actions"><a class="button button-primary" href="index.html">Shop collection</a><button id="signOutButton" class="button button-ghost" type="button">Sign out</button></div></div>
+      <div id="authView"><div class="login-toggle"><button class="tab-button active" type="button" data-auth-mode="signin">Sign in</button><button class="tab-button" type="button" data-auth-mode="signup">Create account</button></div>
+        <form id="authPageForm" novalidate>
+          <div id="nameField" class="hidden"><label>Full name<input id="displayName" type="text" autocomplete="name" placeholder="Your name" /></label></div>
+          <label>Email address<input id="email" type="email" autocomplete="email" placeholder="name@example.com" required /></label>
+          <label>Password<input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="At least 6 characters" required /></label>
+          <button id="submitAuth" class="button button-primary wide-button" type="submit">Sign in</button>
+        </form>
+        <div class="auth-divider"><span>or</span></div><button id="googleAuth" class="button button-secondary wide-button" type="button">Continue with Google</button>
+        <p id="authMessage" class="form-message" role="status"></p>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="auth.js"></script>
+</body>
+</html>

@@ -1,4 +1,35 @@
-import { db, collection, doc, getDoc, getDocs, setDoc, addDoc } from './firebase-config.js';
+import { db, collection, doc, getDoc, getDocs, setDoc, addDoc, auth, onAuthStateChanged } from './firebase-config.js';
+
+const cartStorageKey = 'apniDukanCart';
+const recentStorageKey = 'apniDukanRecentProducts';
+let visibleProducts = new Map();
+
+function getCart() {
+  try { return JSON.parse(localStorage.getItem(cartStorageKey)) || []; } catch { return []; }
+}
+
+function updateCartCount() {
+  const count = getCart().reduce((total, item) => total + item.quantity, 0);
+  document.querySelectorAll('[data-cart-count]').forEach(node => { node.textContent = count; });
+}
+
+function addToCart(product) {
+  if (!product || Number(product.qty) < 1) return showTemporaryToast('This product is currently out of stock.');
+  const cart = getCart();
+  const existing = cart.find(item => item.id === product.id);
+  if (existing) existing.quantity = Math.min(existing.quantity + 1, Number(product.qty));
+  else cart.push({ id: product.id, title: product.title, price: Number(product.price), qty: Number(product.qty), image: product.image, category: product.category, quantity: 1 });
+  localStorage.setItem(cartStorageKey, JSON.stringify(cart));
+  const recent = [product.id, ...getRecentProductIds().filter(id => id !== product.id)].slice(0, 8);
+  localStorage.setItem(recentStorageKey, JSON.stringify(recent));
+  renderHomeProductRails([...visibleProducts.values()]);
+  updateCartCount();
+  showTemporaryToast(`${product.title} added to your cart.`);
+}
+
+function getRecentProductIds() {
+  try { return JSON.parse(localStorage.getItem(recentStorageKey)) || []; } catch { return []; }
+}
 
 const defaultProducts = [
   {
@@ -68,7 +99,7 @@ const defaultTestimonials = [
     id: 'review-meera',
     name: 'Meera',
     location: 'Pune',
-    quote: 'The style curation is top-notch. Highly recommended—each product feels premium, and the service kept me informed at every step.',
+    quote: 'The style curation is top-notch. Highly recommendedâ€”each product feels premium, and the service kept me informed at every step.',
     rating: 5,
     avatar: 'https://via.placeholder.com/80?text=M'
   }
@@ -94,18 +125,12 @@ const defaultSettings = {
 
 async function ensureProductsSeeded() {
   const snapshot = await getDocs(collection(db, 'products'));
-  if (!snapshot.empty) return;
-  let order = defaultProducts.length;
-  for (const product of defaultProducts) {
-    const { id, ...rest } = product;
-    await setDoc(doc(db, 'products', id), { ...rest, createdAt: order });
-    order -= 1;
-  }
+  return snapshot;
 }
 
 async function loadProducts() {
-  await ensureProductsSeeded();
-  const snapshot = await getDocs(collection(db, 'products'));
+  const snapshot = await ensureProductsSeeded();
+  if (snapshot.empty) return defaultProducts;
   const products = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
   products.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
   return products;
@@ -113,27 +138,18 @@ async function loadProducts() {
 
 async function loadSettings() {
   const snap = await getDoc(settingsDocRef);
-  if (!snap.exists()) {
-    await setDoc(settingsDocRef, defaultSettings);
-    return { ...defaultSettings };
-  }
+  if (!snap.exists()) return { ...defaultSettings };
   return { ...defaultSettings, ...snap.data() };
 }
 
 async function ensureTestimonialsSeeded() {
   const snapshot = await getDocs(collection(db, 'testimonials'));
-  if (!snapshot.empty) return;
-  let order = defaultTestimonials.length;
-  for (const review of defaultTestimonials) {
-    const { id, ...rest } = review;
-    await setDoc(doc(db, 'testimonials', id), { ...rest, status: 'approved', createdAt: order });
-    order -= 1;
-  }
+  return snapshot;
 }
 
 async function loadTestimonials() {
-  await ensureTestimonialsSeeded();
-  const snapshot = await getDocs(collection(db, 'testimonials'));
+  const snapshot = await ensureTestimonialsSeeded();
+  if (snapshot.empty) return defaultTestimonials;
   const testimonials = snapshot.docs
     .map(d => ({ id: d.id, status: 'pending', ...d.data() }))
     .filter(review => review.status === 'approved');
@@ -143,12 +159,7 @@ async function loadTestimonials() {
 
 async function getAdminCredentials() {
   const snap = await getDoc(adminCredDocRef);
-  const defaults = { username: 'madaag1', password: '9710800046' };
-  if (!snap.exists()) {
-    await setDoc(adminCredDocRef, defaults);
-    return defaults;
-  }
-  return { ...defaults, ...snap.data() };
+  return snap.exists() ? snap.data() : null;
 }
 
 async function getAuthUsers() {
@@ -172,7 +183,7 @@ async function renderTestimonials() {
     return;
   }
   rotator.innerHTML = testimonials.map((item, index) => {
-    const stars = '★★★★★'.slice(0, item.rating) + '☆☆☆☆☆'.slice(0, 5 - item.rating);
+    const stars = 'â˜…â˜…â˜…â˜…â˜…'.slice(0, item.rating) + 'â˜†â˜†â˜†â˜†â˜†'.slice(0, 5 - item.rating);
     return `
       <article class="testimonial-item${index === 0 ? ' active' : ''}" data-id="${item.id}">
         <div class="testimonial-top">
@@ -197,7 +208,7 @@ async function renderTestimonials() {
 
 function createWhatsAppUrl(product, settings) {
   const phone = settings.whatsappNumber.replace(/[\s+]/g, '');
-  const text = encodeURIComponent(`Hello Apni Dukan, I would like to order ${product.title} priced at ₹${product.price}. Please help me proceed.`);
+  const text = encodeURIComponent(`Hello Apni Dukaan, I would like to order ${product.title} priced at â‚¹${product.price}. Please help me proceed.`);
   return `https://wa.me/${phone}?text=${text}`;
 }
 
@@ -209,11 +220,11 @@ async function applyStoreSettings() {
 
   const heroAction = document.querySelector('.hero-actions .button-secondary');
   if (heroAction) {
-    heroAction.href = `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent('Hello Apni Dukan, I would like to order a product.')}`;
+    heroAction.href = `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent('Hello Apni Dukaan, I would like to order a product.')}`;
   }
   const supportButton = document.querySelector('.support-section .button-secondary');
   if (supportButton) {
-    supportButton.href = `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent('Hello Apni Dukan, I need support.')}`;
+    supportButton.href = `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent('Hello Apni Dukaan, I need support.')}`;
   }
   const footerLinks = document.querySelectorAll('.social-links a');
   if (footerLinks.length >= 2) {
@@ -234,7 +245,7 @@ async function applyStoreSettings() {
   if (footerWhatsAppLink) footerWhatsAppLink.href = `https://wa.me/${settings.whatsappNumber}`;
   const supportWhatsAppLink = document.querySelector('.support-panel .button-secondary');
   if (supportWhatsAppLink) {
-    supportWhatsAppLink.href = `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent('Hello Apni Dukan, I need support.')}`;
+    supportWhatsAppLink.href = `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent('Hello Apni Dukaan, I need support.')}`;
   }
   const emailText = document.querySelector('.support-panel p:nth-of-type(2)');
   if (emailText) emailText.textContent = `Email: ${settings.supportEmail}`;
@@ -262,7 +273,7 @@ function applyLogo(settings) {
   const logoSrc = settings.logoData;
   if (logoSrc) {
     logoContainer.classList.add('custom-logo');
-    logoContainer.innerHTML = `<img class="site-logo" src="${logoSrc}" alt="Apni Dukan logo" />`;
+    logoContainer.innerHTML = `<img class="site-logo" src="${logoSrc}" alt="Apni Dukaan logo" />`;
   } else {
     logoContainer.classList.remove('custom-logo');
     logoContainer.innerHTML = `
@@ -339,6 +350,10 @@ async function renderProducts() {
   const allProducts = await loadProducts();
   if (!cachedSettings) cachedSettings = await loadSettings();
   const products = getFilteredProducts(allProducts, cachedSettings);
+  visibleProducts = new Map(allProducts.map(product => [product.id, product]));
+  renderHomeProductRails(allProducts);
+  const resultCount = document.getElementById('productResultCount');
+  if (resultCount) resultCount.textContent = `${products.length} product${products.length === 1 ? '' : 's'}`;
 
   if (!products.length) {
     productGrid.innerHTML = '<p style="color: var(--muted);">No products match the selected filters. Clear filters to see all items.</p>';
@@ -360,11 +375,12 @@ async function renderProducts() {
           </div>
           <div>
             <div class="product-pricing">
-              <span class="product-price">₹${Number(product.price).toLocaleString()}</span>
-              <span class="product-market">₹${Number(product.marketPrice).toLocaleString()}</span>
+              <span class="product-price">â‚¹${Number(product.price).toLocaleString()}</span>
+              <span class="product-market">â‚¹${Number(product.marketPrice).toLocaleString()}</span>
             </div>
             <div class="product-actions">
-              <a class="button button-primary" href="${createWhatsAppUrl(product, cachedSettings)}" target="_blank">Order on WhatsApp</a>
+              <button class="button button-primary add-to-cart" type="button" data-product-id="${product.id}">Add to cart</button>
+              <a class="product-whatsapp" href="${createWhatsAppUrl(product, cachedSettings)}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
               <span>${product.qty} in stock</span>
             </div>
             ${discount ? `<p style="margin-top:12px;color:var(--accent);">Save ${discount}%</p>` : ''}
@@ -373,6 +389,35 @@ async function renderProducts() {
       </article>
     `;
   }).join('');
+}
+
+function productRailCard(product) {
+  return `<article class="rail-product-card"><img src="${product.image}" alt="${product.title}" /><div><p>${product.category}</p><h3>${product.title}</h3><strong>â‚¹${Number(product.price).toLocaleString('en-IN')}</strong><button class="add-to-cart" type="button" data-product-id="${product.id}">Add to cart</button></div></article>`;
+}
+
+function renderHomeProductRails(products) {
+  const recentIds = getRecentProductIds();
+  const recent = recentIds.map(id => products.find(product => product.id === id)).filter(Boolean);
+  const recommended = [...products].slice(0, 4);
+  const sale = [...products].filter(product => Number(product.marketPrice) > Number(product.price)).sort((a, b) => (b.marketPrice - b.price) - (a.marketPrice - a.price)).slice(0, 4);
+  const writeRail = (id, items, empty) => {
+    const grid = document.getElementById(id);
+    if (grid) grid.innerHTML = items.length ? items.map(productRailCard).join('') : `<p class="rail-empty">${empty}</p>`;
+  };
+  writeRail('recentlyViewedGrid', recent, 'Your recently added products will appear here.');
+  writeRail('recommendedGrid', recommended, 'New recommendations are coming soon.');
+  writeRail('saleGrid', sale, 'Todayâ€™s special offers are coming soon.');
+}
+
+function setupDealCarousel() {
+  const track = document.getElementById('dealTrack');
+  if (!track) return;
+  const slides = track.children.length;
+  let index = 0;
+  const move = step => { index = (index + step + slides) % slides; track.style.transform = `translateX(-${index * 100}%)`; };
+  document.getElementById('dealPrevious')?.addEventListener('click', () => move(-1));
+  document.getElementById('dealNext')?.addEventListener('click', () => move(1));
+  setInterval(() => move(1), 4500);
 }
 
 function updateFiltersFromAction(filterType, filterValue, audienceValue) {
@@ -426,6 +471,15 @@ function hideAudienceSubmenu() {
 }
 
 function setupStorefrontFilters() {
+  const filterToggle = document.getElementById('filterToggle');
+  const filtersPanel = document.getElementById('filtersPanel');
+  if (filterToggle && filtersPanel) {
+    filterToggle.addEventListener('click', () => {
+      const isOpen = filtersPanel.classList.toggle('filters-open');
+      filterToggle.setAttribute('aria-expanded', String(isOpen));
+      filterToggle.innerHTML = isOpen ? 'âœ• Close filters <span>Back to products</span>' : 'â˜° Filters <span>Refine products</span>';
+    });
+  }
   const categoryButtons = document.querySelectorAll('.category-action');
   categoryButtons.forEach(button => {
     button.addEventListener('click', event => {
@@ -473,7 +527,11 @@ function setupStorefrontFilters() {
   if (searchForm) {
     searchForm.addEventListener('submit', event => {
       event.preventDefault();
+      const headerSearch = searchForm.querySelector('input[type="search"]');
+      const productSearch = document.getElementById('productSearch');
+      if (headerSearch && productSearch) productSearch.value = headerSearch.value;
       renderProducts();
+      document.getElementById('collections')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   }
 
@@ -596,7 +654,7 @@ async function handleAdminLogin() {
     showTemporaryToast('Enter admin username and password.');
     return;
   }
-  if (username === credentials.username && password === credentials.password) {
+  if (credentials && username === credentials.username && password === credentials.password) {
     window.location.href = 'admin.html';
     return;
   }
@@ -624,13 +682,26 @@ async function handleOtpLogin() {
 }
 
 function handleGoogleLogin() {
-  showTemporaryToast('Google login simulated. Welcome to Apni Dukan!');
+  showTemporaryToast('Google login simulated. Welcome to Apni Dukaan!');
 }
 
 async function init() {
   cachedSettings = await applyStoreSettings();
   await renderProducts();
   await renderTestimonials();
+  updateCartCount();
+
+  document.addEventListener('click', event => {
+    const button = event.target.closest('.add-to-cart');
+    if (button) addToCart(visibleProducts.get(button.dataset.productId));
+  });
+
+  setupDealCarousel();
+
+  onAuthStateChanged(auth, user => {
+    const accountLink = document.getElementById('accountLink');
+    if (accountLink) accountLink.textContent = user ? 'My account' : 'Sign in';
+  });
 
   const authForm = document.getElementById('userAuthForm');
   if (authForm) {

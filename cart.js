@@ -1,0 +1,11 @@
+const key = 'apniDukanCart';
+const format = value => `₹${Number(value).toLocaleString('en-IN')}`;
+function getCart() { try { return JSON.parse(localStorage.getItem(key)) || []; } catch { return []; } }
+function save(cart) { localStorage.setItem(key, JSON.stringify(cart)); render(); }
+function render() {
+  const cart = getCart(); const list = document.getElementById('cartItems'); const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+  list.innerHTML = cart.length ? cart.map(item => `<article class="cart-item"><img src="${item.image}" alt="${item.title}" /><div class="cart-item-info"><p class="customer-tag">${item.category || 'Lifestyle'}</p><h2>${item.title}</h2><strong>${format(item.price)}</strong></div><div class="quantity-control"><button data-action="decrease" data-id="${item.id}" aria-label="Decrease quantity">−</button><span>${item.quantity}</span><button data-action="increase" data-id="${item.id}" aria-label="Increase quantity">+</button></div><button class="remove-item" data-action="remove" data-id="${item.id}">Remove</button></article>`).join('') : `<div class="empty-state"><h2>Your cart is empty</h2><p>Add something special from our collection to get started.</p><a class="button button-primary" href="index.html">Explore collection</a></div>`;
+  document.getElementById('subtotal').textContent = format(subtotal); document.getElementById('total').textContent = format(subtotal); document.getElementById('checkoutLink').classList.toggle('is-disabled', !cart.length); document.getElementById('checkoutLink').setAttribute('aria-disabled', String(!cart.length));
+}
+document.getElementById('cartItems').addEventListener('click', event => { const button = event.target.closest('[data-action]'); if (!button) return; const cart = getCart(); const item = cart.find(product => product.id === button.dataset.id); if (!item) return; if (button.dataset.action === 'increase') item.quantity = Math.min(item.quantity + 1, item.qty || 99); if (button.dataset.action === 'decrease') item.quantity -= 1; const next = button.dataset.action === 'remove' ? cart.filter(product => product.id !== item.id) : cart.filter(product => product.quantity > 0); save(next); });
+document.getElementById('checkoutLink').addEventListener('click', event => { if (!getCart().length) event.preventDefault(); }); render();

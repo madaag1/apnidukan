@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Apni Dukan is a premium lifestyle storefront with curated watches, footwear, apparel, sunglasses and easy WhatsApp ordering." />
-  <title>Apni Dukan | Luxury Lifestyle</title>
+  <meta name="description" content="Apni Dukaan is a premium lifestyle storefront with curated watches, footwear, apparel, sunglasses and easy WhatsApp ordering." />
+  <title>Apni Dukaan | Luxury Lifestyle</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
@@ -16,18 +16,18 @@
       <div class="brand brand-with-emblem">
         <div id="logoContainer" class="logo-mark"></div>
         <div class="logo-copy">
-          <p class="eyebrow">Apni Dukan</p>
+          <p class="eyebrow">Apni Dukaan</p>
           <strong>Premium lifestyle store</strong>
         </div>
       </div>
       <form class="search-bar" action="#collections">
-        <input type="search" placeholder="Search designer watches, footwear, electronics..." aria-label="Search Apni Dukan" />
+        <input type="search" placeholder="Search designer watches, footwear, electronics..." aria-label="Search Apni Dukaan" />
         <button type="submit">Search</button>
       </form>
       <div class="header-actions">
-        <a class="header-link" href="#login">Sign in</a>
+        <a class="header-link" id="accountLink" href="auth.html">Sign in</a>
         <a class="header-link" href="#support">Help</a>
-        <a class="header-link header-cart" href="#collections">Cart</a>
+        <a class="header-link header-cart" href="cart.html">Cart <span class="cart-count" data-cart-count>0</span></a>
         <a id="headerInstagram" class="header-link header-social" href="https://instagram.com" target="_blank" rel="noopener noreferrer" title="Instagram">Instagram</a>
         <a id="headerWhatsApp" class="header-link header-social" href="https://wa.me/919999999999" target="_blank" rel="noopener noreferrer" title="WhatsApp">WhatsApp</a>
       </div>
@@ -89,11 +89,24 @@
   </div>
 
   <main>
+    <section class="deal-of-day" aria-labelledby="dealHeading">
+      <div class="deal-heading-row">
+        <div><p class="eyebrow">Limited time offers</p><h1 id="dealHeading">Deal of the Day</h1></div>
+        <div class="deal-controls"><button type="button" id="dealPrevious" aria-label="Previous deal">â†</button><button type="button" id="dealNext" aria-label="Next deal">â†’</button></div>
+      </div>
+      <div class="deal-viewport">
+        <div class="deal-track" id="dealTrack">
+          <article class="deal-slide deal-gold"><p>FLASH DEAL</p><h2>Up to 50% off</h2><span>Curated watches, footwear & more</span><a href="#collections">Shop offer</a></article>
+          <article class="deal-slide deal-wine"><p>NEW THIS WEEK</p><h2>Fresh style drops</h2><span>Handpicked essentials at special prices</span><a href="#collections">Explore arrivals</a></article>
+          <article class="deal-slide deal-blue"><p>MEMBER FAVOURITE</p><h2>Premium picks</h2><span>Limited pieces. While stock lasts.</span><a href="#collections">See best sellers</a></article>
+        </div>
+      </div>
+    </section>
     <section id="hero" class="hero">
       <div class="hero-copy">
-        <div class="hero-tag">Since 2016 • Curated luxury for the modern wardrobe</div>
+        <div class="hero-tag">Since 2016 â€¢ Curated luxury for the modern wardrobe</div>
         <h2>Step into premium style with a wardrobe made to impress.</h2>
-        <p>Apni Dukan brings elegant menswear, women’s essentials, premium footwear, and luxe electronics together in one refined shopping experience.</p>
+        <p>Apni Dukaan brings elegant menswear, womenâ€™s essentials, premium footwear, and luxe electronics together in one refined shopping experience.</p>
         <div class="hero-actions">
           <a class="button button-primary" href="#collections">Shop Now</a>
           <a class="button button-secondary" href="https://wa.me/919999999999?text=Hello%20Apni%20Dukan,%20I%20want%20to%20order%20a%20product" target="_blank" rel="noopener noreferrer">Order on WhatsApp</a>
@@ -112,7 +125,7 @@
             <h3>Elite watch & sneaker duo</h3>
             <p>Luxury essentials designed for confidence, comfort, and premium appeal.</p>
             <div class="visual-meta">
-              <span>₹2,799</span>
+              <span>â‚¹2,799</span>
               <span class="badge">Best seller</span>
             </div>
             <a class="button button-primary" href="#collections">View collection</a>
@@ -123,63 +136,12 @@
 
     <section id="login" class="section section-alt login-section">
       <div class="section-head">
-        <p class="eyebrow">Login portal</p>
-        <h2>Customer signup, login, and secure admin access</h2>
+        <p class="eyebrow">Member access</p>
+        <h2>Shop faster with your Apni Dukaan account</h2>
       </div>
       <div class="login-card">
-        <div class="login-toggle">
-          <button type="button" class="tab-button active" data-mode="customer-login">Login</button>
-          <button type="button" class="tab-button" data-mode="customer-signup">Sign up</button>
-          <button type="button" class="tab-button" data-mode="admin-login">Admin</button>
-        </div>
-        <form id="userAuthForm">
-          <div class="form-row" data-mode="customer-login">
-            <label>
-              Email or mobile
-              <input id="authContact" type="text" placeholder="Enter email or mobile" autocomplete="username" />
-            </label>
-            <label>
-              Password
-              <input id="authPassword" type="password" placeholder="Enter password" autocomplete="current-password" />
-            </label>
-            <button class="button button-primary" type="submit">Customer login</button>
-            <div class="login-extra-actions">
-              <button type="button" class="button button-secondary" id="otpLoginButton">Login with OTP</button>
-              <button type="button" class="button button-secondary" id="googleLoginButton">Login with Google</button>
-            </div>
-          </div>
-          <div class="form-row hidden" data-mode="customer-signup">
-            <label>
-              Full name
-              <input id="signupName" type="text" placeholder="Enter full name" autocomplete="name" />
-            </label>
-            <label>
-              Email address
-              <input id="signupEmail" type="email" placeholder="name@example.com" autocomplete="email" />
-            </label>
-            <label>
-              Mobile number
-              <input id="signupMobile" type="tel" placeholder="+919876543210" autocomplete="tel" />
-            </label>
-            <label>
-              Password
-              <input id="signupPassword" type="password" placeholder="Create a password" autocomplete="new-password" />
-            </label>
-            <button class="button button-primary" type="button" id="signupButton">Create account</button>
-          </div>
-          <div class="form-row hidden" data-mode="admin-login">
-            <label>
-              Admin username
-              <input id="adminUsername" type="text" placeholder="Enter admin username" autocomplete="username" />
-            </label>
-            <label>
-              Admin password
-              <input id="adminPassword" type="password" placeholder="Enter admin password" autocomplete="current-password" />
-            </label>
-            <button class="button button-primary" type="button" id="adminLoginButton">Admin login</button>
-          </div>
-        </form>
-        <p class="login-note">Secure admin access is hidden by default. Customers can sign up, login, or use Google/OTP shortcuts.</p>
+        <p class="login-note">Create an account or sign in securely with email and password or Google. Your account keeps checkout quick and your orders connected to you.</p>
+        <a class="button button-primary" href="auth.html">Sign in or create account</a>
       </div>
     </section>
 
@@ -218,8 +180,12 @@
 
     <section id="collections" class="section">
       <div class="section-head">
-        <p class="eyebrow">Featured</p>
-        <h2>Best sellers & latest arrivals</h2>
+        <p class="eyebrow">Shop now</p>
+        <h2>Trending products</h2>
+      </div>
+      <div class="catalogue-tools">
+        <button class="filter-toggle" id="filterToggle" type="button" aria-expanded="false" aria-controls="filtersPanel">â˜° Filters <span>Refine products</span></button>
+        <span class="product-result-count" id="productResultCount"></span>
       </div>
       <div class="filters-panel" id="filtersPanel">
         <div class="filter-group">
@@ -277,6 +243,13 @@
         <button type="button" class="button button-ghost" id="clearFilters">Clear filters</button>
       </div>
       <div class="products-grid" id="productGrid"></div>
+      <p class="listing-disclosure">Product images are for reference only where a listing says so. Handmade, customised, thrifted and supplier-fulfilled items may vary in colour, finish, packaging or minor details. We never represent an item as an original branded product unless the listing expressly says so and the seller can verify it.</p>
+    </section>
+
+    <section class="home-rails section" aria-label="More products">
+      <div class="rail-section"><div class="rail-title"><h2>Recently viewed</h2><a href="#collections">View all</a></div><div class="home-product-grid" id="recentlyViewedGrid"></div></div>
+      <div class="rail-section"><div class="rail-title"><h2>Recommended for you</h2><a href="#collections">View all</a></div><div class="home-product-grid" id="recommendedGrid"></div></div>
+      <div class="rail-section"><div class="rail-title"><h2>Up to 50% off</h2><a href="#collections">View all</a></div><div class="home-product-grid" id="saleGrid"></div></div>
     </section>
 
     <section id="feedback" class="section section-alt feedback-section">
@@ -286,16 +259,16 @@
       </div>
       <div class="feedback-grid">
         <article class="feedback-card">
-          <p>“Apni Dukan made buying premium formalwear effortless. The packaging and support were outstanding.”</p>
-          <span>– Ananya, Mumbai</span>
+          <p>â€œApni Dukaan made buying premium formalwear effortless. The packaging and support were outstanding.â€</p>
+          <span>â€“ Ananya, Mumbai</span>
         </article>
         <article class="feedback-card">
-          <p>“Fast WhatsApp ordering, great prices and the watch collection feels very luxury. Highly recommended.”</p>
-          <span>– Rohit, Delhi</span>
+          <p>â€œFast WhatsApp ordering, great prices and the watch collection feels very luxury. Highly recommended.â€</p>
+          <span>â€“ Rohit, Delhi</span>
         </article>
         <article class="feedback-card">
-          <p>“The admin portal is smooth for store updates — products, offers, and social links are easy to manage.”</p>
-          <span>– Apni Dukan Team</span>
+          <p>â€œThe admin portal is smooth for store updates â€” products, offers, and social links are easy to manage.â€</p>
+          <span>â€“ Apni Dukaan Team</span>
         </article>
       </div>
     </section>
@@ -335,7 +308,7 @@
   <footer class="site-footer">
     <div class="footer-grid footer-big">
       <div class="footer-card">
-        <h3>Apni Dukan</h3>
+        <h3>Apni Dukaan</h3>
         <p>Discover premium apparel, accessories, and lifestyle essentials crafted for modern elegance.</p>
       </div>
       <div class="footer-card">
@@ -343,11 +316,14 @@
         <a class="footer-link" href="#collections">Best sellers</a>
         <a class="footer-link" href="#categories">Explore categories</a>
         <a class="footer-link" href="#support">WhatsApp orders</a>
+        <a class="footer-link" href="about.html">About us</a>
       </div>
       <div class="footer-card">
         <h4>Need help?</h4>
         <a class="footer-link" href="mailto:support@apnidukan.com">support@apnidukan.com</a>
         <a class="footer-link" href="tel:+919999999999">+91 99999 99999</a>
+        <a class="footer-link" href="policies.html">Returns & shipping</a>
+        <a class="footer-link" href="policies.html#legal">Legal & IP policy</a>
       </div>
       <div class="footer-card">
         <h4>Connect</h4>
@@ -356,9 +332,10 @@
       </div>
     </div>
     <div class="footer-note-row">
-      <p class="footer-note">© 2026 Apni Dukan. Crafted for premium ease and style.</p>
-      <p class="footer-note">Fast delivery • Secure payment • 24/7 support</p>
+      <p class="footer-note">Â© 2026 Apni Dukaan. Crafted for premium ease and style.</p>
+      <p class="footer-note">Fast delivery â€¢ Secure payment â€¢ 24/7 support</p>
     </div>
+    <p class="footer-disclaimer">Apni Dukaan does not sell counterfeit or â€œcloneâ€ products. Products may be handmade, customised, thrifted/pre-owned, unbranded, or fulfilled by independent sellers. Images are illustrative only where stated; please read the product listing carefully. Brand names and marks belong to their respective owners; no affiliation is implied.</p>
   </footer>
 
   <script type="module" src="script.js"></script>
