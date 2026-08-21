@@ -654,6 +654,18 @@ function setupNavDropdowns() {
       menu.classList.add('is-open');
     };
 
+    const toggleMenu = event => {
+      if (!trigger) return;
+      const isTrigger = event.target === trigger || trigger.contains(event.target);
+      if (!isTrigger) return;
+      event.preventDefault();
+      const isOpen = menu.classList.contains('is-open');
+      closeAllDropdowns();
+      if (!isOpen) {
+        openMenu();
+      }
+    };
+
     menu.addEventListener('mouseover', event => {
       if (event.target === menu || menu.contains(event.target)) {
         openMenu();
@@ -666,6 +678,7 @@ function setupNavDropdowns() {
       }
     });
 
+    trigger?.addEventListener('click', toggleMenu);
     trigger?.addEventListener('focus', openMenu);
 
     panel.querySelectorAll('.dropdown-item').forEach(item => {
