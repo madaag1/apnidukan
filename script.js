@@ -99,7 +99,7 @@ const defaultTestimonials = [
     id: 'review-meera',
     name: 'Meera',
     location: 'Pune',
-    quote: 'The style curation is top-notch. Highly recommendedâ€”each product feels premium, and the service kept me informed at every step.',
+    quote: 'The style curation is top-notch. Highly recommended—each product feels premium, and the service kept me informed at every step.',
     rating: 5,
     avatar: 'https://via.placeholder.com/80?text=M'
   }
@@ -183,7 +183,7 @@ async function renderTestimonials() {
     return;
   }
   rotator.innerHTML = testimonials.map((item, index) => {
-    const stars = 'â˜…â˜…â˜…â˜…â˜…'.slice(0, item.rating) + 'â˜†â˜†â˜†â˜†â˜†'.slice(0, 5 - item.rating);
+    const stars = '★★★★★'.slice(0, item.rating) + '☆☆☆☆☆'.slice(0, 5 - item.rating);
     return `
       <article class="testimonial-item${index === 0 ? ' active' : ''}" data-id="${item.id}">
         <div class="testimonial-top">
@@ -208,7 +208,7 @@ async function renderTestimonials() {
 
 function createWhatsAppUrl(product, settings) {
   const phone = settings.whatsappNumber.replace(/[\s+]/g, '');
-  const text = encodeURIComponent(`Hello Apni Dukaan, I would like to order ${product.title} priced at â‚¹${product.price}. Please help me proceed.`);
+  const text = encodeURIComponent(`Hello Apni Dukaan, I would like to order ${product.title} priced at ₹${product.price}. Please help me proceed.`);
   return `https://wa.me/${phone}?text=${text}`;
 }
 
@@ -375,8 +375,8 @@ async function renderProducts() {
           </div>
           <div>
             <div class="product-pricing">
-              <span class="product-price">â‚¹${Number(product.price).toLocaleString()}</span>
-              <span class="product-market">â‚¹${Number(product.marketPrice).toLocaleString()}</span>
+              <span class="product-price">₹${Number(product.price).toLocaleString()}</span>
+              <span class="product-market">₹${Number(product.marketPrice).toLocaleString()}</span>
             </div>
             <div class="product-actions">
               <button class="button button-primary add-to-cart" type="button" data-product-id="${product.id}">Add to cart</button>
@@ -392,7 +392,7 @@ async function renderProducts() {
 }
 
 function productRailCard(product) {
-  return `<article class="rail-product-card"><img src="${product.image}" alt="${product.title}" /><div><p>${product.category}</p><h3>${product.title}</h3><strong>â‚¹${Number(product.price).toLocaleString('en-IN')}</strong><button class="add-to-cart" type="button" data-product-id="${product.id}">Add to cart</button></div></article>`;
+  return `<article class="rail-product-card"><img src="${product.image}" alt="${product.title}" /><div><p>${product.category}</p><h3>${product.title}</h3><strong>₹${Number(product.price).toLocaleString('en-IN')}</strong><button class="add-to-cart" type="button" data-product-id="${product.id}">Add to cart</button></div></article>`;
 }
 
 function renderHomeProductRails(products) {
@@ -406,7 +406,7 @@ function renderHomeProductRails(products) {
   };
   writeRail('recentlyViewedGrid', recent, 'Your recently added products will appear here.');
   writeRail('recommendedGrid', recommended, 'New recommendations are coming soon.');
-  writeRail('saleGrid', sale, 'Todayâ€™s special offers are coming soon.');
+  writeRail('saleGrid', sale, 'Today’s special offers are coming soon.');
 }
 
 function setupDealCarousel() {
@@ -477,7 +477,7 @@ function setupStorefrontFilters() {
     filterToggle.addEventListener('click', () => {
       const isOpen = filtersPanel.classList.toggle('filters-open');
       filterToggle.setAttribute('aria-expanded', String(isOpen));
-      filterToggle.innerHTML = isOpen ? 'âœ• Close filters <span>Back to products</span>' : 'â˜° Filters <span>Refine products</span>';
+      filterToggle.innerHTML = isOpen ? '✕ Close filters <span>Back to products</span>' : '☰ Filters <span>Refine products</span>';
     });
   }
   const categoryButtons = document.querySelectorAll('.category-action');

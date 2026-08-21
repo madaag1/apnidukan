@@ -1876,10 +1876,10 @@ body {
 
 /* Deal controls sit on the banner edges, keeping the heading uncluttered. */
 .deal-of-day { position: relative; }
-.deal-controls { position: absolute; z-index: 2; top: 59%; left: 18px; right: 18px; justify-content: space-between; pointer-events: none; }
-.deal-controls button { width: 48px; height: 48px; border: 1px solid rgba(244, 216, 108, .75); background: rgba(8, 8, 8, .78); color: #f4d86c; box-shadow: 0 8px 28px rgba(0,0,0,.28); pointer-events: auto; }
-.deal-controls button:hover { border-color: #f4d86c; background: #f4d86c; color: #17130a; transform: scale(1.06); }
-@media (max-width: 760px) { .deal-controls { left: 10px; right: 10px; top: 61%; }.deal-controls button { width: 42px; height: 42px; } }
+.deal-controls { position: absolute; z-index: 2; top: 59%; left: -46px; right: -46px; justify-content: space-between; pointer-events: none; }
+.deal-controls button { width: auto; height: auto; padding: 4px; border: 0; background: transparent; color: #f4d86c; box-shadow: none; font-size: 2.15rem; line-height: 1; pointer-events: auto; }
+.deal-controls button:hover { background: transparent; color: #fff; transform: scale(1.15); }
+@media (max-width: 760px) { .deal-controls { left: 8px; right: 8px; top: 61%; }.deal-controls button { font-size: 1.8rem; } }
 
 /* Catalogue contrast must not inherit a light admin-configured surface colour. */
 .filter-toggle { background: #191813 !important; border-color: rgba(244, 216, 108, .55) !important; color: #fff !important; }
