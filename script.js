@@ -37,6 +37,10 @@ const defaultProducts = [
     title: 'Signature Sport Watch',
     category: 'Watches',
     audience: 'Men',
+    brand: 'Apex',
+    size: '42mm',
+    material: 'Steel',
+    color: 'Black',
     description: 'Sleek sport watch with premium leather strap and advanced features.',
     price: 2499,
     marketPrice: 3999,
@@ -44,10 +48,44 @@ const defaultProducts = [
     image: 'https://via.placeholder.com/600x600?text=Sport+Watch'
   },
   {
-    id: 'sneaker-air-02',
+    id: 'watch-classic-02',
+    title: 'Classic Gold Watch',
+    category: 'Watches',
+    audience: 'Unisex',
+    brand: 'Goldline',
+    size: '38mm',
+    material: 'Gold plated',
+    color: 'Gold',
+    description: 'Elegant timepiece for daily wear with a refined premium finish.',
+    price: 3299,
+    marketPrice: 4999,
+    qty: 12,
+    image: 'https://via.placeholder.com/600x600?text=Classic+Gold+Watch'
+  },
+  {
+    id: 'watch-smart-03',
+    title: 'Minimal Smart Watch',
+    category: 'Watches',
+    audience: 'Men',
+    brand: 'Nova',
+    size: '44mm',
+    material: 'Titanium',
+    color: 'Silver',
+    description: 'Smart fitness tracking with a clean premium wrist design.',
+    price: 4199,
+    marketPrice: 5999,
+    qty: 9,
+    image: 'https://via.placeholder.com/600x600?text=Smart+Watch'
+  },
+  {
+    id: 'sneaker-air-04',
     title: 'Urban Runner Sneakers',
     category: 'Footwear',
     audience: 'Men',
+    brand: 'Velocity',
+    size: '9 UK',
+    material: 'Mesh',
+    color: 'Grey',
     description: 'Comfortable and stylish sneakers crafted for city life.',
     price: 1799,
     marketPrice: 2999,
@@ -55,10 +93,14 @@ const defaultProducts = [
     image: 'https://via.placeholder.com/600x600?text=Urban+Sneakers'
   },
   {
-    id: 'formal-shirt-03',
+    id: 'formal-shirt-05',
     title: 'Elegant Formal Shirt',
     category: 'Clothing',
     audience: 'Men',
+    brand: 'Northline',
+    size: 'M',
+    material: 'Cotton',
+    color: 'White',
     description: 'Tailored formal shirt in premium cotton for every office meeting.',
     price: 899,
     marketPrice: 1599,
@@ -66,10 +108,14 @@ const defaultProducts = [
     image: 'https://via.placeholder.com/600x600?text=Formal+Shirt'
   },
   {
-    id: 'earbuds-pro-04',
+    id: 'earbuds-pro-06',
     title: 'Noise-Canceling Earbuds',
     category: 'Electronics',
     audience: 'Unisex',
+    brand: 'Echo',
+    size: 'Standard',
+    material: 'Plastic',
+    color: 'Black',
     description: 'Wireless earbuds with long battery life and crisp audio.',
     price: 2199,
     marketPrice: 3499,
@@ -321,7 +367,9 @@ function applyBrandTextStyle(style) {
 }
 
 function getFilteredProducts(allProducts, settings) {
-  const searchValue = document.getElementById('productSearch')?.value.trim().toLowerCase() || '';
+  const productSearchInput = document.getElementById('productSearch');
+  const headerSearchInput = document.getElementById('headerSearchInput');
+  const searchValue = (productSearchInput?.value || headerSearchInput?.value || '').trim().toLowerCase();
   const selectedAudience = document.getElementById('filterAudience')?.value || '';
   const selectedCategory = document.getElementById('filterCategory')?.value || '';
   const selectedBrand = document.getElementById('filterBrand')?.value.trim().toLowerCase() || '';
@@ -330,7 +378,19 @@ function getFilteredProducts(allProducts, settings) {
   const maxPrice = Number(document.getElementById('filterMaxPrice')?.value || 0);
 
   return allProducts.filter(product => {
-    const matchesSearch = !searchValue || [product.title, product.description, product.category, product.brand, product.size, product.audience].some(field => String(field || '').toLowerCase().includes(searchValue));
+    const searchableText = [
+      product.title,
+      product.description,
+      product.category,
+      product.brand,
+      product.size,
+      product.audience,
+      product.material,
+      product.color,
+      `${product.title} ${product.category} ${product.brand}`
+    ].join(' ').toLowerCase();
+
+    const matchesSearch = !searchValue || searchableText.includes(searchValue) || searchValue.split(/\s+/).every(word => searchableText.includes(word));
     const matchesAudience = !selectedAudience || String(product.audience || '').toLowerCase() === selectedAudience.toLowerCase();
     const matchesCategory = !selectedCategory || product.category === selectedCategory;
     const matchesBrand = !selectedBrand || String(product.brand || '').toLowerCase().includes(selectedBrand);
@@ -468,6 +528,158 @@ function hideAudienceSubmenu() {
   if (!submenu || !menu) return;
   submenu.hidden = true;
   menu.classList.remove('submenu-active');
+}
+
+function getMatchingProductSuggestions(allProducts, query) {
+  const value = query.trim().toLowerCase();
+  if (!value) return [];
+
+  const matched = allProducts
+    .map(product => {
+      const haystack = [
+        product.title,
+        product.category,
+        product.audience,
+        product.brand,
+        product.material,
+        product.color,
+        product.size
+      ].filter(Boolean).join(' ').toLowerCase();
+
+      let score = 0;
+      if (haystack.includes(value)) score += 10;
+      if (product.title.toLowerCase().startsWith(value)) score += 5;
+      if (product.category.toLowerCase().startsWith(value)) score += 3;
+      return { product, score };
+    })
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score || a.product.title.localeCompare(b.product.title));
+
+  const uniqueMatches = [];
+  const seen = new Set();
+  matched.forEach(({ product }) => {
+    const label = product.title;
+    if (!seen.has(label.toLowerCase())) {
+      seen.add(label.toLowerCase());
+      uniqueMatches.push({ label, type: product.category });
+    }
+  });
+
+  if (uniqueMatches.length) {
+    return uniqueMatches.slice(0, 6);
+  }
+
+  const fallback = [
+    { label: 'Watch', type: 'Watches' },
+    { label: 'Wallet', type: 'Accessories' },
+    { label: 'Shirt', type: 'Clothing' },
+    { label: 'Shoes', type: 'Footwear' },
+    { label: 'Sunglasses', type: 'Fashion' }
+  ];
+
+  return fallback.filter(item => item.label.toLowerCase().includes(value)).slice(0, 5);
+}
+
+function setupHeaderSearchSuggestions() {
+  const headerInput = document.getElementById('headerSearchInput');
+  const suggestionsBox = document.getElementById('headerSearchSuggestions');
+  const productSearch = document.getElementById('productSearch');
+  if (!headerInput || !suggestionsBox) return;
+
+  const renderSuggestions = async () => {
+    const products = await loadProducts();
+    const query = headerInput.value.trim();
+    const suggestions = getMatchingProductSuggestions(products, query);
+
+    if (!query || !suggestions.length) {
+      suggestionsBox.innerHTML = '';
+      suggestionsBox.classList.add('hidden');
+      return;
+    }
+
+    suggestionsBox.innerHTML = suggestions.map(item => `
+      <button type="button" class="header-search-suggestion" data-suggestion="${item.label}">
+        <span>${item.label}</span>
+        <small>${item.type}</small>
+      </button>
+    `).join('');
+    suggestionsBox.classList.remove('hidden');
+
+    suggestionsBox.querySelectorAll('.header-search-suggestion').forEach(button => {
+      button.addEventListener('click', () => {
+        const selected = button.dataset.suggestion;
+        headerInput.value = selected;
+        if (productSearch) productSearch.value = selected;
+        suggestionsBox.classList.add('hidden');
+        renderProducts();
+      });
+    });
+  };
+
+  headerInput.addEventListener('input', renderSuggestions);
+  document.addEventListener('click', event => {
+    if (!event.target.closest('#headerSearchInput') && !event.target.closest('.header-search-suggestion')) {
+      suggestionsBox.classList.add('hidden');
+    }
+  });
+
+  const form = document.getElementById('headerSearchForm');
+  if (form) {
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const value = headerInput.value.trim();
+      if (productSearch) productSearch.value = value;
+      renderProducts();
+      document.getElementById('collections')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      suggestionsBox.classList.add('hidden');
+    });
+  }
+}
+
+function setupNavDropdowns() {
+  const navMenus = document.querySelectorAll('.nav-item-with-menu, .nav-dropdown');
+
+  const closeAllDropdowns = () => {
+    navMenus.forEach(menu => menu.classList.remove('is-open'));
+  };
+
+  navMenus.forEach(menu => {
+    const panel = menu.querySelector('.dropdown-menu');
+    if (!panel) return;
+
+    const trigger = menu.querySelector('.nav-link, .dropdown-toggle');
+
+    const openMenu = () => {
+      closeAllDropdowns();
+      menu.classList.add('is-open');
+    };
+
+    menu.addEventListener('mouseover', event => {
+      if (event.target === menu || menu.contains(event.target)) {
+        openMenu();
+      }
+    });
+
+    menu.addEventListener('mouseout', event => {
+      if (!event.relatedTarget || !menu.contains(event.relatedTarget)) {
+        menu.classList.remove('is-open');
+      }
+    });
+
+    trigger?.addEventListener('focus', openMenu);
+
+    panel.querySelectorAll('.dropdown-item').forEach(item => {
+      item.addEventListener('mousedown', () => {
+        closeAllDropdowns();
+      });
+    });
+  });
+
+  document.addEventListener('click', event => {
+    if (!event.target.closest('.nav-item-with-menu')) {
+      closeAllDropdowns();
+    }
+  });
 }
 
 function setupStorefrontFilters() {
@@ -708,7 +920,9 @@ async function init() {
     authForm.addEventListener('submit', handleCustomerLogin);
   }
 
+  setupNavDropdowns();
   setupStorefrontFilters();
+  setupHeaderSearchSuggestions();
 
   document.querySelectorAll('.tab-button').forEach(button => {
     button.addEventListener('click', () => updateAuthMode(button.dataset.mode));

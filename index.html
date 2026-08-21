@@ -20,8 +20,9 @@
           <strong>Premium lifestyle store</strong>
         </div>
       </div>
-      <form class="search-bar" action="#collections">
-        <input type="search" placeholder="Search designer watches, footwear, electronics..." aria-label="Search Apni Dukaan" />
+      <form id="headerSearchForm" class="search-bar" action="#collections" autocomplete="off">
+        <input id="headerSearchInput" type="search" placeholder="Search designer watches, footwear, electronics..." aria-label="Search Apni Dukaan" />
+        <div id="headerSearchSuggestions" class="header-search-suggestions hidden" aria-live="polite"></div>
         <button type="submit">Search</button>
       </form>
       <div class="header-actions">
@@ -33,9 +34,31 @@
       </div>
     </div>
     <nav class="primary-nav">
-      <a href="#hero">Home</a>
-      <a href="#collections">Best sellers</a>
-      <div class="nav-dropdown">
+      <div class="nav-item-with-menu">
+        <a href="#hero" class="nav-link">Home</a>
+        <div class="dropdown-menu ribbon-dropdown">
+          <div class="dropdown-column">
+            <strong>Quick links</strong>
+            <a class="dropdown-item" href="#collections">Trending now</a>
+            <a class="dropdown-item" href="#collections">Best sellers</a>
+            <a class="dropdown-item" href="#support">Support</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-item-with-menu">
+        <a href="#collections" class="nav-link">Best sellers</a>
+        <div class="dropdown-menu ribbon-dropdown">
+          <div class="dropdown-column">
+            <strong>Top picks</strong>
+            <a class="dropdown-item" href="#collections">Luxury watches</a>
+            <a class="dropdown-item" href="#collections">Signature accessories</a>
+            <a class="dropdown-item" href="#collections">Footwear essentials</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-dropdown nav-item-with-menu">
         <button class="nav-link dropdown-toggle" type="button">Categories</button>
         <div class="dropdown-menu" id="navDropdownMenu">
           <div class="dropdown-column">
@@ -59,9 +82,42 @@
           </div>
         </div>
       </div>
-      <a href="#feedback">Reviews</a>
-      <a href="#support">Support</a>
-      <a href="#collections">New arrivals</a>
+
+      <div class="nav-item-with-menu">
+        <a href="#feedback" class="nav-link">Reviews</a>
+        <div class="dropdown-menu ribbon-dropdown">
+          <div class="dropdown-column">
+            <strong>What buyers say</strong>
+            <a class="dropdown-item" href="#feedback">Verified feedback</a>
+            <a class="dropdown-item" href="#feedback">Luxury experience</a>
+            <a class="dropdown-item" href="#feedback">Fast support</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-item-with-menu">
+        <a href="#support" class="nav-link">Support</a>
+        <div class="dropdown-menu ribbon-dropdown">
+          <div class="dropdown-column">
+            <strong>Customer care</strong>
+            <a class="dropdown-item" href="#support">WhatsApp orders</a>
+            <a class="dropdown-item" href="#support">Shipping help</a>
+            <a class="dropdown-item" href="#support">Returns & exchanges</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-item-with-menu">
+        <a href="#collections" class="nav-link">New arrivals</a>
+        <div class="dropdown-menu ribbon-dropdown">
+          <div class="dropdown-column">
+            <strong>Fresh style</strong>
+            <a class="dropdown-item" href="#collections">Premium watches</a>
+            <a class="dropdown-item" href="#collections">New accessories</a>
+            <a class="dropdown-item" href="#collections">Trending essentials</a>
+          </div>
+        </div>
+      </div>
     </nav>
   </header>
 
@@ -102,82 +158,6 @@
         </div>
       </div>
     </section>
-    <section id="hero" class="hero">
-      <div class="hero-copy">
-        <div class="hero-tag">Since 2016 • Curated luxury for the modern wardrobe</div>
-        <h2>Step into premium style with a wardrobe made to impress.</h2>
-        <p>Apni Dukaan brings elegant menswear, women’s essentials, premium footwear, and luxe electronics together in one refined shopping experience.</p>
-        <div class="hero-actions">
-          <a class="button button-primary" href="#collections">Shop Now</a>
-          <a class="button button-secondary" href="https://wa.me/919999999999?text=Hello%20Apni%20Dukan,%20I%20want%20to%20order%20a%20product" target="_blank" rel="noopener noreferrer">Order on WhatsApp</a>
-        </div>
-        <div class="hero-features">
-          <span>Free WhatsApp ordering</span>
-          <span>Daily style drops</span>
-          <span>Instant support</span>
-        </div>
-      </div>
-      <div class="hero-visual">
-        <div class="visual-card">
-          <div class="visual-spotlight"></div>
-          <div class="visual-content">
-            <p class="eyebrow">Featured drop</p>
-            <h3>Elite watch & sneaker duo</h3>
-            <p>Luxury essentials designed for confidence, comfort, and premium appeal.</p>
-            <div class="visual-meta">
-              <span>₹2,799</span>
-              <span class="badge">Best seller</span>
-            </div>
-            <a class="button button-primary" href="#collections">View collection</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="login" class="section section-alt login-section">
-      <div class="section-head">
-        <p class="eyebrow">Member access</p>
-        <h2>Shop faster with your Apni Dukaan account</h2>
-      </div>
-      <div class="login-card">
-        <p class="login-note">Create an account or sign in securely with email and password or Google. Your account keeps checkout quick and your orders connected to you.</p>
-        <a class="button button-primary" href="auth.html">Sign in or create account</a>
-      </div>
-    </section>
-
-    <section id="categories" class="section section-alt">
-      <div class="section-head">
-        <p class="eyebrow">Categories</p>
-        <h2>Shop by category</h2>
-      </div>
-      <div class="category-grid">
-        <button class="category-card category-action" data-filter-type="category" data-filter="Watches">
-          <h3>Watches</h3>
-          <p>Statement timepieces for formal and sport.</p>
-        </button>
-        <button class="category-card category-action" data-filter-type="category" data-filter="Footwear">
-          <h3>Footwear</h3>
-          <p>Sneakers, formals and athleisure for every pace.</p>
-        </button>
-        <button class="category-card category-action" data-filter-type="category" data-filter="Clothing">
-          <h3>Clothing</h3>
-          <p>Shirts, pants, suits and everyday wardrobe staples.</p>
-        </button>
-        <button class="category-card category-action" data-filter-type="category" data-filter="Sunglasses">
-          <h3>Sunglasses</h3>
-          <p>Designer shades with luxe finishes.</p>
-        </button>
-        <button class="category-card category-action" data-filter-type="category" data-filter="Perfume">
-          <h3>Perfume</h3>
-          <p>Signature fragrances for every occasion.</p>
-        </button>
-        <button class="category-card category-action" data-filter-type="category" data-filter="Accessories">
-          <h3>Accessories</h3>
-          <p>Belts, wallets, bags, ties and brooches.</p>
-        </button>
-      </div>
-    </section>
-
     <section id="collections" class="section">
       <div class="section-head">
         <p class="eyebrow">Shop now</p>
@@ -243,7 +223,6 @@
         <button type="button" class="button button-ghost" id="clearFilters">Clear filters</button>
       </div>
       <div class="products-grid" id="productGrid"></div>
-      <p class="listing-disclosure">Product images are for reference only where a listing says so. Handmade, customised, thrifted and supplier-fulfilled items may vary in colour, finish, packaging or minor details. We never represent an item as an original branded product unless the listing expressly says so and the seller can verify it.</p>
     </section>
 
     <section class="home-rails section" aria-label="More products">
@@ -293,6 +272,33 @@
       </div>
     </section>
   </main>
+
+  <section class="section section-alt sell-with-us">
+    <div class="section-head">
+      <p class="eyebrow">Grow with us</p>
+      <h2>Sell with Apni Dukaan</h2>
+    </div>
+    <div class="sell-with-us-panel">
+      <div class="sell-copy">
+        <p>Launch your products on a premium lifestyle marketplace designed for buyers who want trusted quality, elegant discovery, and a smoother shopping experience.</p>
+        <ul class="sell-points">
+          <li>List products like watches, fashion, accessories and lifestyle essentials</li>
+          <li>Reach customers through a curated storefront and WhatsApp-ready order flow</li>
+          <li>Get support for catalogue onboarding, pricing guidance and product visibility</li>
+        </ul>
+      </div>
+      <div class="sell-card">
+        <p class="sell-mini-tag">Seller onboarding</p>
+        <h3>Start selling in 3 easy steps</h3>
+        <ol class="sell-steps">
+          <li>Share your product list</li>
+          <li>Get approval and pricing support</li>
+          <li>Go live and receive orders</li>
+        </ol>
+        <a class="button button-primary" href="mailto:support@apnidukan.com?subject=Sell%20with%20Apni%20Dukan">Become a seller</a>
+      </div>
+    </div>
+  </section>
 
   <section class="testimonial-panel section section-alt" id="customer-feedback">
     <div class="testimonial-panel-inner">
