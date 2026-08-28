@@ -2571,6 +2571,16 @@ body {
   color: #f4d86c !important;
 }
 
+.products-grid .product-image-wrap {
+  overflow: hidden;
+}
+
+.products-grid .product-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 /* Keep stacked header sections content-sized on phones instead of using desktop flex bases as heights. */
 @media (max-width: 680px) {
   .site-header-top > .brand,
