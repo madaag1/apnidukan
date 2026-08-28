@@ -422,28 +422,33 @@ async function renderProducts() {
 
   productGrid.innerHTML = products.map(product => {
     const discount = product.marketPrice > product.price ? Math.round(100 - (product.price / product.marketPrice) * 100) : 0;
+    const rating = Number(product.rating || 4.5).toFixed(1);
+    const reviewCount = Number(product.reviewCount || Math.max(24, product.qty * 17)).toLocaleString('en-IN');
+    const boughtCount = Number(product.boughtCount || Math.max(12, product.qty * 4)).toLocaleString('en-IN');
     return `
       <article class="product-card">
-        <img src="${product.image}" alt="${product.title}" />
+        <div class="product-image-wrap">
+          <img src="${product.image}" alt="${product.title}" />
+        </div>
         <div class="product-info">
-          <div>
-            <p class="customer-tag">${product.category}</p>
+          <div class="product-copy">
+            <p class="product-sponsored">Sponsored <span aria-hidden="true">i</span></p>
+            <p class="product-brand">${product.brand || product.category}</p>
             <h3>${product.title}</h3>
-            <p>${product.description}</p>
-            ${product.brand ? `<p class="product-detail">Brand: ${product.brand}</p>` : ''}
-            ${product.size ? `<p class="product-detail">Size: ${product.size}</p>` : ''}
+            <p class="product-summary">${product.description}</p>
+            <p class="product-rating"><strong>${rating}</strong> <span class="rating-stars" aria-label="${rating} out of 5 stars">★★★★★</span> <a href="#feedback">(${reviewCount})</a></p>
+            <p class="product-bought">${boughtCount}+ bought in past month</p>
           </div>
-          <div>
+          <div class="product-bottom">
             <div class="product-pricing">
               <span class="product-price">₹${Number(product.price).toLocaleString()}</span>
-              <span class="product-market">₹${Number(product.marketPrice).toLocaleString()}</span>
+              ${Number(product.marketPrice) > Number(product.price) ? `<span class="product-market">₹${Number(product.marketPrice).toLocaleString()}</span>` : ''}
+              ${discount ? `<span class="product-discount">Save ${discount}%</span>` : ''}
             </div>
+            <p class="product-delivery">FREE delivery <strong>Tue, 1 Sept</strong></p>
             <div class="product-actions">
               <button class="button button-primary add-to-cart" type="button" data-product-id="${product.id}">Add to cart</button>
-              <a class="product-whatsapp" href="${createWhatsAppUrl(product, cachedSettings)}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-              <span>${product.qty} in stock</span>
             </div>
-            ${discount ? `<p style="margin-top:12px;color:var(--accent);">Save ${discount}%</p>` : ''}
           </div>
         </div>
       </article>
