@@ -2657,5 +2657,24 @@ body {
     flex-basis: calc(50% - 6px);
   }
 }
+
+@media (max-width: 760px) {
+  .products-grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(280px, 82vw);
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 4px 12px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    overscroll-behavior-x: contain;
+  }
+
+  .products-grid .product-card {
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+}
 .products-grid .product-price { color: #f4d86c !important; }
 .products-grid .product-market { color: #a9a297 !important; }
