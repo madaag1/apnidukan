@@ -426,7 +426,7 @@ async function renderProducts() {
     const reviewCount = Number(product.reviewCount || Math.max(24, product.qty * 17)).toLocaleString('en-IN');
     const boughtCount = Number(product.boughtCount || Math.max(12, product.qty * 4)).toLocaleString('en-IN');
     return `
-      <article class="product-card">
+      <article class="product-card" data-product-id="${product.id}" tabindex="0" role="link" aria-label="View ${product.title}">
         <div class="product-image-wrap">
           <img src="${product.image}" alt="${product.title}" />
         </div>
@@ -924,6 +924,16 @@ async function init() {
   document.addEventListener('click', event => {
     const button = event.target.closest('.add-to-cart');
     if (button) addToCart(visibleProducts.get(button.dataset.productId));
+    const card = event.target.closest('.product-card[data-product-id]');
+    if (card && !button) window.location.href = `product.html?id=${encodeURIComponent(card.dataset.productId)}`;
+  });
+
+  document.addEventListener('keydown', event => {
+    const card = event.target.closest('.product-card[data-product-id]');
+    if (card && (event.key === 'Enter' || event.key === ' ')) {
+      event.preventDefault();
+      window.location.href = `product.html?id=${encodeURIComponent(card.dataset.productId)}`;
+    }
   });
 
   setupDealCarousel();
