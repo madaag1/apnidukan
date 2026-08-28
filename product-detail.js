@@ -53,7 +53,7 @@ function renderDetail(product) {
       </dl>
       <div class="product-detail-actions">
         <button id="detailAddToCart" class="button button-primary" type="button">Add to cart</button>
-        <a class="button button-secondary" href="checkout.html">Buy now</a>
+        <button id="detailBuyNow" class="button button-secondary" type="button">Buy now</button>
       </div>
       <p class="product-stock">${Number(product.qty || 0)} available</p>
     </div>
@@ -61,6 +61,10 @@ function renderDetail(product) {
   detail.hidden = false;
   status.hidden = true;
   document.getElementById('detailAddToCart').addEventListener('click', () => addToCart(product));
+  document.getElementById('detailBuyNow').addEventListener('click', () => {
+    addToCart(product);
+    window.location.href = 'checkout.html';
+  });
   detail.querySelectorAll('.product-thumbnail').forEach(button => button.addEventListener('click', () => {
     document.getElementById('productMainImage').src = button.dataset.image;
     detail.querySelectorAll('.product-thumbnail').forEach(item => item.classList.remove('is-active'));
