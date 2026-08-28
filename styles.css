@@ -1728,7 +1728,8 @@ body {
 }
 
 .product-image-wrap {
-  height: 300px;
+  aspect-ratio: 1;
+  height: auto;
   padding: 10px;
   background: #f4f4f4;
 }
@@ -2533,6 +2534,43 @@ body {
 .products-grid .product-info { background: #fff !important; }
 .products-grid .product-info h3 { color: #111 !important; }
 
+/* Keep the retail card hierarchy while matching the storefront theme. */
+.products-grid .product-card {
+  background: #151515 !important;
+  border-color: #343434 !important;
+}
+
+.products-grid .product-info {
+  background: #151515 !important;
+  color: var(--text);
+}
+
+.products-grid .product-info h3,
+.products-grid .product-brand,
+.products-grid .product-rating,
+.products-grid .product-delivery strong {
+  color: #fff !important;
+}
+
+.products-grid .product-sponsored,
+.products-grid .product-summary,
+.products-grid .product-bought,
+.products-grid .product-delivery {
+  color: #c7bda9 !important;
+}
+
+.products-grid .product-price {
+  color: #f4e7a4 !important;
+}
+
+.products-grid .product-market {
+  color: #aaa !important;
+}
+
+.products-grid .product-discount {
+  color: #f4d86c !important;
+}
+
 /* Keep stacked header sections content-sized on phones instead of using desktop flex bases as heights. */
 @media (max-width: 680px) {
   .site-header-top > .brand,
@@ -2552,6 +2590,17 @@ body {
 
   .header-actions {
     height: auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px 6px;
+  }
+
+  .header-link {
+    flex: 1 1 calc(33.333% - 6px);
+    min-width: 0;
+    padding: 8px 6px;
+    font-size: .82rem;
   }
 }
 
@@ -2595,6 +2644,7 @@ body {
     min-width: 0;
     padding-inline: 6px;
     font-size: .78rem;
+    flex-basis: calc(50% - 6px);
   }
 }
 .products-grid .product-price { color: #f4d86c !important; }
