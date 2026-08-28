@@ -55,7 +55,6 @@ function renderDetail(product) {
         <button id="detailAddToCart" class="button button-primary" type="button">Add to cart</button>
         <button id="detailBuyNow" class="button button-secondary" type="button">Buy now</button>
       </div>
-      <p class="product-stock">${Number(product.qty || 0)} available</p>
     </div>
   `;
   detail.hidden = false;

@@ -27,38 +27,15 @@
       </form>
       <div class="header-actions">
         <a class="header-link" id="accountLink" href="auth.html">Sign in</a>
-        <a class="header-link" href="sell-with-us.html">Sell with us</a>
-        <a class="header-link" href="#support">Help</a>
         <a class="header-link header-cart" href="cart.html">Cart <span class="cart-count" data-cart-count>0</span></a>
-        <a id="headerInstagram" class="header-link header-social" href="https://instagram.com" target="_blank" rel="noopener noreferrer" title="Instagram">Instagram</a>
-        <a id="headerWhatsApp" class="header-link header-social" href="https://wa.me/919999999999" target="_blank" rel="noopener noreferrer" title="WhatsApp">WhatsApp</a>
       </div>
     </div>
-    <nav class="primary-nav">
-      <div class="nav-item-with-menu">
-        <a href="#hero" class="nav-link">Home</a>
-        <div class="dropdown-menu ribbon-dropdown">
-          <div class="dropdown-column">
-            <strong>Quick links</strong>
-            <a class="dropdown-item" href="#collections">Trending now</a>
-            <a class="dropdown-item" href="#collections">Best sellers</a>
-            <a class="dropdown-item" href="#support">Support</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="nav-item-with-menu">
-        <a href="#collections" class="nav-link">Best sellers</a>
-        <div class="dropdown-menu ribbon-dropdown">
-          <div class="dropdown-column">
-            <strong>Top picks</strong>
-            <a class="dropdown-item" href="#collections">Luxury watches</a>
-            <a class="dropdown-item" href="#collections">Signature accessories</a>
-            <a class="dropdown-item" href="#collections">Footwear essentials</a>
-          </div>
-        </div>
-      </div>
-
+    <button class="mobile-nav-toggle" id="mobileNavToggle" type="button" aria-expanded="false" aria-controls="primaryNav">
+      <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+      <span class="mobile-nav-toggle-label">Menu</span>
+    </button>
+    <nav class="primary-nav" id="primaryNav" aria-label="Main navigation">
+      <a href="index.html" class="nav-link">Home</a>
       <div class="nav-dropdown nav-item-with-menu">
         <button class="nav-link dropdown-toggle" type="button">Categories</button>
         <div class="dropdown-menu" id="navDropdownMenu">
@@ -83,44 +60,10 @@
           </div>
         </div>
       </div>
-
-      <div class="nav-item-with-menu">
-        <a href="#feedback" class="nav-link">Reviews</a>
-        <div class="dropdown-menu ribbon-dropdown">
-          <div class="dropdown-column">
-            <strong>What buyers say</strong>
-            <a class="dropdown-item" href="#feedback">Verified feedback</a>
-            <a class="dropdown-item" href="#feedback">Luxury experience</a>
-            <a class="dropdown-item" href="#feedback">Fast support</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="nav-item-with-menu">
-        <a href="#support" class="nav-link">Support</a>
-        <div class="dropdown-menu ribbon-dropdown">
-          <div class="dropdown-column">
-            <strong>Customer care</strong>
-            <a class="dropdown-item" href="#support">WhatsApp orders</a>
-            <a class="dropdown-item" href="#support">Shipping help</a>
-            <a class="dropdown-item" href="#support">Returns & exchanges</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="nav-item-with-menu">
-        <a href="#collections" class="nav-link">New arrivals</a>
-        <div class="dropdown-menu ribbon-dropdown">
-          <div class="dropdown-column">
-            <strong>Fresh style</strong>
-            <a class="dropdown-item" href="#collections">Premium watches</a>
-            <a class="dropdown-item" href="#collections">New accessories</a>
-            <a class="dropdown-item" href="#collections">Trending essentials</a>
-          </div>
-        </div>
-      </div>
-
-      <a href="sell-with-us.html" class="nav-link">Sell with us</a>
+      <a href="#collections" class="nav-link">New arrivals</a>
+      <a href="#collections" class="nav-link">Best sellers</a>
+      <a href="#support" class="nav-link">Support</a>
+      <a href="sell-with-us.html" class="nav-link nav-sell-link">Sell with us</a>
     </nav>
   </header>
 
@@ -150,15 +93,25 @@
   <main>
     <section class="deal-of-day" aria-labelledby="dealHeading">
       <div class="deal-heading-row">
-        <div><p class="eyebrow">Limited time offers</p><h1 id="dealHeading">Deal of the Day</h1></div>
-        <div class="deal-controls"><button type="button" id="dealPrevious" aria-label="Previous deal">&larr;</button><button type="button" id="dealNext" aria-label="Next deal">&rarr;</button></div>
+        <div><p class="eyebrow">Limited-time offer</p><h1 id="dealHeading">Deal of the Day</h1></div>
+        <div class="deal-controls"><button type="button" id="dealPrevious" aria-label="Previous deal">&#8249;</button><button type="button" id="dealNext" aria-label="Next deal">&#8250;</button></div>
       </div>
       <div class="deal-viewport">
         <div class="deal-track" id="dealTrack">
-          <article class="deal-slide deal-gold"><p>FLASH DEAL</p><h2>Up to 50% off</h2><span>Curated watches, footwear & more</span><a href="#collections">Shop offer</a></article>
-          <article class="deal-slide deal-wine"><p>NEW THIS WEEK</p><h2>Fresh style drops</h2><span>Handpicked essentials at special prices</span><a href="#collections">Explore arrivals</a></article>
-          <article class="deal-slide deal-blue"><p>MEMBER FAVOURITE</p><h2>Premium picks</h2><span>Limited pieces. While stock lasts.</span><a href="#collections">See best sellers</a></article>
+          <article class="deal-slide deal-gold">
+            <div class="deal-slide-copy"><p class="deal-kicker">FLASH DEAL</p><h2>Signature Sport Watch</h2><span>Refined everyday style with a premium leather strap.</span><div class="deal-price"><strong>₹2,499</strong><s>₹3,999</s><b>38% OFF</b></div><p class="deal-stock">Limited pieces available</p><a href="product.html?id=watch-sport-01">Shop this deal <span aria-hidden="true">→</span></a></div>
+            <div class="deal-product-image"><img src="https://via.placeholder.com/600x600?text=Sport+Watch" alt="Signature Sport Watch" /></div>
+          </article>
+          <article class="deal-slide deal-wine">
+            <div class="deal-slide-copy"><p class="deal-kicker">BEST SELLER</p><h2>Urban Runner Sneakers</h2><span>Comfort-first city sneakers made for every day.</span><div class="deal-price"><strong>₹1,799</strong><s>₹2,999</s><b>40% OFF</b></div><p class="deal-stock">Fast-moving favourite</p><a href="product.html?id=sneaker-air-04">Shop this deal <span aria-hidden="true">→</span></a></div>
+            <div class="deal-product-image"><img src="https://via.placeholder.com/600x600?text=Urban+Sneakers" alt="Urban Runner Sneakers" /></div>
+          </article>
+          <article class="deal-slide deal-blue">
+            <div class="deal-slide-copy"><p class="deal-kicker">MEMBER FAVOURITE</p><h2>Noise-Canceling Earbuds</h2><span>Rich sound, all-day comfort and a sleek finish.</span><div class="deal-price"><strong>₹2,199</strong><s>₹3,499</s><b>37% OFF</b></div><p class="deal-stock">Offer valid while stock lasts</p><a href="product.html?id=earbuds-pro-06">Shop this deal <span aria-hidden="true">→</span></a></div>
+            <div class="deal-product-image"><img src="https://via.placeholder.com/600x600?text=Premium+Earbuds" alt="Noise-Canceling Earbuds" /></div>
+          </article>
         </div>
+        <div class="deal-indicators" id="dealIndicators" aria-label="Choose a deal"></div>
       </div>
     </section>
     <section id="collections" class="section">
@@ -169,6 +122,10 @@
       <div class="catalogue-tools">
         <button class="filter-toggle" id="filterToggle" type="button" aria-expanded="false" aria-controls="filtersPanel">☰ Filters <span>Refine products</span></button>
         <span class="product-result-count" id="productResultCount"></span>
+      </div>
+      <div class="active-filter-bar" id="activeFilterBar" aria-live="polite" hidden>
+        <span id="activeFilterText"></span>
+        <button type="button" id="clearActiveFilters">Clear all</button>
       </div>
       <div class="filters-panel" id="filtersPanel">
         <div class="filter-group">
@@ -229,12 +186,12 @@
     </section>
 
     <section class="home-rails section" aria-label="More products">
-      <div class="rail-section"><div class="rail-title"><h2>Recently viewed</h2><a href="#collections">View all</a></div><div class="home-product-grid" id="recentlyViewedGrid"></div></div>
+      <div class="rail-section" id="recentlyViewedSection" hidden><div class="rail-title"><h2>Recently viewed</h2><a href="#collections">View all</a></div><div class="home-product-grid" id="recentlyViewedGrid"></div></div>
       <div class="rail-section"><div class="rail-title"><h2>Recommended for you</h2><a href="#collections">View all</a></div><div class="home-product-grid" id="recommendedGrid"></div></div>
-      <div class="rail-section"><div class="rail-title"><h2>Up to 50% off</h2><a href="#collections">View all</a></div><div class="home-product-grid" id="saleGrid"></div></div>
+      <div class="rail-section"><div class="rail-title"><h2>Best offers</h2><a href="#collections">View all</a></div><div class="home-product-grid" id="saleGrid"></div></div>
     </section>
 
-    <section id="feedback" class="section section-alt feedback-section">
+    <section id="legacy-feedback" class="section section-alt feedback-section" hidden>
       <div class="section-head">
         <p class="eyebrow">Customer Care</p>
         <h2>Client reviews</h2>
@@ -261,22 +218,26 @@
         <h2>We are here to help</h2>
       </div>
       <div class="support-panel">
-        <div>
+        <div class="support-intro">
           <h3>Customer support</h3>
-          <p>Open Monday to Saturday, 10AM to 8PM.</p>
-          <p>Email: support@apnidukan.com</p>
-          <p>Phone: +91 99999 99999</p>
+          <p>Choose the quickest way to reach us. We are available Monday to Saturday, 10AM to 8PM.</p>
+          <div class="support-contact-grid">
+            <a class="support-contact-card" href="tel:+919999999999"><span>Call us</span><strong>+91 99999 99999</strong></a>
+            <a class="support-contact-card" href="mailto:support@apnidukan.com"><span>Email us</span><strong>support@apnidukan.com</strong></a>
+            <a class="support-contact-card" href="policies.html"><span>Need information?</span><strong>Shipping & returns</strong></a>
+          </div>
         </div>
-        <div>
-          <h3>WhatsApp orders</h3>
-          <p>Send your order request directly via chat.</p>
-          <a class="button button-secondary" href="https://wa.me/919999999999?text=Hello%20Apni%20Dukan,%20I%20want%20to%20order%20from%20your%20store" target="_blank" rel="noopener noreferrer">Open WhatsApp</a>
+        <div class="support-whatsapp-card">
+          <p class="eyebrow">Fastest response</p>
+          <h3>Order on WhatsApp</h3>
+          <p>Share the product you like and our team will help you with the next steps.</p>
+          <a class="button button-primary" href="https://wa.me/919999999999?text=Hello%20Apni%20Dukan,%20I%20want%20to%20order%20from%20your%20store" target="_blank" rel="noopener noreferrer">Chat on WhatsApp <span aria-hidden="true">→</span></a>
         </div>
       </div>
     </section>
   </main>
 
-  <section class="testimonial-panel section section-alt" id="customer-feedback">
+  <section class="testimonial-panel section section-alt" id="feedback">
     <div class="testimonial-panel-inner">
       <div class="testimonial-header">
         <p class="eyebrow">Customer stories</p>
@@ -296,11 +257,11 @@
       <div class="footer-card">
         <h4>Shop</h4>
         <a class="footer-link" href="#collections">Best sellers</a>
-        <a class="footer-link" href="#categories">Explore categories</a>
+        <a class="footer-link" href="#collections">Explore categories</a>
         <a class="footer-link" href="#support">WhatsApp orders</a>
         <a class="footer-link" href="about.html">About us</a>
       </div>
-      <div class="footer-card">
+      <div class="footer-card footer-support-card">
         <h4>Need help?</h4>
         <a class="footer-link" href="mailto:support@apnidukan.com">support@apnidukan.com</a>
         <a class="footer-link" href="tel:+919999999999">+91 99999 99999</a>

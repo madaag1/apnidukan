@@ -408,12 +408,14 @@ async function renderProducts() {
   if (!productGrid) return;
 
   const allProducts = await loadProducts();
+  syncFilterOptions(allProducts);
   if (!cachedSettings) cachedSettings = await loadSettings();
   const products = getFilteredProducts(allProducts, cachedSettings);
   visibleProducts = new Map(allProducts.map(product => [product.id, product]));
   renderHomeProductRails(allProducts);
   const resultCount = document.getElementById('productResultCount');
   if (resultCount) resultCount.textContent = `${products.length} product${products.length === 1 ? '' : 's'}`;
+  updateActiveFilterBar(products.length);
 
   if (!products.length) {
     productGrid.innerHTML = '<p style="color: var(--muted);">No products match the selected filters. Clear filters to see all items.</p>';
@@ -456,6 +458,46 @@ async function renderProducts() {
   }).join('');
 }
 
+function syncFilterOptions(products) {
+  const setOptions = (id, values, allLabel) => {
+    const select = document.getElementById(id);
+    if (!select) return;
+    const current = select.value;
+    const uniqueValues = [...new Set(values.filter(Boolean).map(value => String(value).trim()))].sort((a, b) => a.localeCompare(b));
+    select.innerHTML = `<option value="">${allLabel}</option>${uniqueValues.map(value => `<option value="${value}">${value}</option>`).join('')}`;
+    select.value = uniqueValues.includes(current) ? current : '';
+  };
+
+  setOptions('filterCategory', products.map(product => product.category), 'All categories');
+  setOptions('filterAudience', products.map(product => product.audience), 'All audiences');
+}
+
+function updateActiveFilterBar(resultCount) {
+  const bar = document.getElementById('activeFilterBar');
+  const text = document.getElementById('activeFilterText');
+  if (!bar || !text) return;
+  const fields = [
+    ['productSearch', 'Search'], ['filterAudience', 'Audience'], ['filterCategory', 'Category'],
+    ['filterBrand', 'Brand'], ['filterSize', 'Size'], ['filterMinPrice', 'Min Rs'], ['filterMaxPrice', 'Max Rs']
+  ];
+  const active = fields.map(([id, label]) => {
+    const value = document.getElementById(id)?.value.trim();
+    return value ? `${label}: ${value}` : '';
+  }).filter(Boolean);
+  bar.hidden = active.length === 0;
+  text.textContent = active.length ? `${resultCount} found - ${active.join(' - ')}` : '';
+}
+
+function clearAllProductFilters() {
+  ['productSearch', 'filterAudience', 'filterCategory', 'filterBrand', 'filterSize', 'filterMinPrice', 'filterMaxPrice'].forEach(id => {
+    const field = document.getElementById(id);
+    if (field) field.value = '';
+  });
+  const headerSearch = document.getElementById('headerSearchInput');
+  if (headerSearch) headerSearch.value = '';
+  renderProducts();
+}
+
 function productRailCard(product) {
   return `<article class="rail-product-card"><img src="${product.image}" alt="${product.title}" /><div><p>${product.category}</p><h3>${product.title}</h3><strong>₹${Number(product.price).toLocaleString('en-IN')}</strong><button class="add-to-cart" type="button" data-product-id="${product.id}">Add to cart</button></div></article>`;
 }
@@ -465,6 +507,8 @@ function renderHomeProductRails(products) {
   const recent = recentIds.map(id => products.find(product => product.id === id)).filter(Boolean);
   const recommended = [...products].slice(0, 4);
   const sale = [...products].filter(product => Number(product.marketPrice) > Number(product.price)).sort((a, b) => (b.marketPrice - b.price) - (a.marketPrice - a.price)).slice(0, 4);
+  const recentlyViewedSection = document.getElementById('recentlyViewedSection');
+  if (recentlyViewedSection) recentlyViewedSection.hidden = recent.length === 0;
   const writeRail = (id, items, empty) => {
     const grid = document.getElementById(id);
     if (grid) grid.innerHTML = items.length ? items.map(productRailCard).join('') : `<p class="rail-empty">${empty}</p>`;
@@ -478,11 +522,27 @@ function setupDealCarousel() {
   const track = document.getElementById('dealTrack');
   if (!track) return;
   const slides = track.children.length;
+  const indicators = document.getElementById('dealIndicators');
   let index = 0;
-  const move = step => { index = (index + step + slides) % slides; track.style.transform = `translateX(-${index * 100}%)`; };
+  const show = nextIndex => {
+    index = (nextIndex + slides) % slides;
+    track.style.transform = `translateX(-${index * 100}%)`;
+    indicators?.querySelectorAll('button').forEach((button, buttonIndex) => {
+      const isActive = buttonIndex === index;
+      button.classList.toggle('active', isActive);
+      button.setAttribute('aria-current', String(isActive));
+    });
+  };
+  const move = step => show(index + step);
+  if (indicators) {
+    indicators.innerHTML = Array.from({ length: slides }, (_, slideIndex) => `<button type="button" aria-label="Show deal ${slideIndex + 1}" aria-current="${slideIndex === 0}"></button>`).join('');
+    indicators.querySelectorAll('button').forEach((button, slideIndex) => button.addEventListener('click', () => show(slideIndex)));
+  }
   document.getElementById('dealPrevious')?.addEventListener('click', () => move(-1));
   document.getElementById('dealNext')?.addEventListener('click', () => move(1));
-  setInterval(() => move(1), 4500);
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    setInterval(() => move(1), 4500);
+  }
 }
 
 function updateFiltersFromAction(filterType, filterValue, audienceValue) {
@@ -700,6 +760,33 @@ function setupNavDropdowns() {
   });
 }
 
+function setupMobileNavigation() {
+  const toggle = document.getElementById('mobileNavToggle');
+  const nav = document.getElementById('primaryNav');
+  if (!toggle || !nav) return;
+
+  toggle.addEventListener('click', () => {
+    const isOpen = nav.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  nav.querySelectorAll('a:not([data-role]):not([data-filter-type])').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.matchMedia('(max-width: 760px)').matches) {
+        nav.classList.remove('is-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
+
+  window.addEventListener('resize', () => {
+    if (!window.matchMedia('(max-width: 760px)').matches) {
+      nav.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
 function setupStorefrontFilters() {
   const filterToggle = document.getElementById('filterToggle');
   const filtersPanel = document.getElementById('filtersPanel');
@@ -770,22 +857,16 @@ function setupStorefrontFilters() {
     const field = document.getElementById(id);
     if (field) {
       field.addEventListener('input', () => renderProducts());
+      field.addEventListener('change', () => renderProducts());
     }
   });
 
   const clearFilters = document.getElementById('clearFilters');
   if (clearFilters) {
-    clearFilters.addEventListener('click', () => {
-      document.getElementById('productSearch').value = '';
-      document.getElementById('filterAudience').value = '';
-      document.getElementById('filterCategory').value = '';
-      document.getElementById('filterBrand').value = '';
-      document.getElementById('filterSize').value = '';
-      document.getElementById('filterMinPrice').value = '';
-      document.getElementById('filterMaxPrice').value = '';
-      renderProducts();
-    });
+    clearFilters.addEventListener('click', clearAllProductFilters);
   }
+
+  document.getElementById('clearActiveFilters')?.addEventListener('click', clearAllProductFilters);
 }
 
 function rotateTestimonials() {
@@ -949,6 +1030,7 @@ async function init() {
   }
 
   setupNavDropdowns();
+  setupMobileNavigation();
   setupStorefrontFilters();
   setupHeaderSearchSuggestions();
 
