@@ -45,7 +45,7 @@ const defaultProducts = [
     price: 2499,
     marketPrice: 3999,
     qty: 18,
-    image: 'https://via.placeholder.com/600x600?text=Sport+Watch'
+    image: 'https://placehold.co/600x600/111827/F4D86C?text=Sport+Watch'
   },
   {
     id: 'watch-classic-02',
@@ -60,7 +60,7 @@ const defaultProducts = [
     price: 3299,
     marketPrice: 4999,
     qty: 12,
-    image: 'https://via.placeholder.com/600x600?text=Classic+Gold+Watch'
+    image: 'https://placehold.co/600x600/2D2414/F4D86C?text=Classic+Gold+Watch'
   },
   {
     id: 'watch-smart-03',
@@ -75,7 +75,7 @@ const defaultProducts = [
     price: 4199,
     marketPrice: 5999,
     qty: 9,
-    image: 'https://via.placeholder.com/600x600?text=Smart+Watch'
+    image: 'https://placehold.co/600x600/1C2937/F4D86C?text=Smart+Watch'
   },
   {
     id: 'sneaker-air-04',
@@ -90,7 +90,7 @@ const defaultProducts = [
     price: 1799,
     marketPrice: 2999,
     qty: 32,
-    image: 'https://via.placeholder.com/600x600?text=Urban+Sneakers'
+    image: 'https://placehold.co/600x600/3B1F2B/F4D86C?text=Urban+Sneakers'
   },
   {
     id: 'formal-shirt-05',
@@ -105,7 +105,7 @@ const defaultProducts = [
     price: 899,
     marketPrice: 1599,
     qty: 45,
-    image: 'https://via.placeholder.com/600x600?text=Formal+Shirt'
+    image: 'https://placehold.co/600x600/263238/F4D86C?text=Formal+Shirt'
   },
   {
     id: 'earbuds-pro-06',
@@ -120,7 +120,7 @@ const defaultProducts = [
     price: 2199,
     marketPrice: 3499,
     qty: 27,
-    image: 'https://via.placeholder.com/600x600?text=Earbuds'
+    image: 'https://placehold.co/600x600/12324A/F4D86C?text=Earbuds'
   }
 ];
 
@@ -131,7 +131,7 @@ const defaultTestimonials = [
     location: 'Bengaluru',
     quote: 'Amazing service and premium quality products. The delivery was fast, and the premium packaging made it feel special.',
     rating: 5,
-    avatar: 'https://via.placeholder.com/80?text=P'
+    avatar: 'https://placehold.co/80x80/1F2937/F4D86C?text=P'
   },
   {
     id: 'review-aarav',
@@ -139,7 +139,7 @@ const defaultTestimonials = [
     location: 'Chennai',
     quote: 'WhatsApp ordering was quick and the packaging felt luxurious. I appreciate the personal service and smooth checkout.',
     rating: 5,
-    avatar: 'https://via.placeholder.com/80?text=A'
+    avatar: 'https://placehold.co/80x80/312E81/F4D86C?text=A'
   },
   {
     id: 'review-meera',
@@ -147,7 +147,7 @@ const defaultTestimonials = [
     location: 'Pune',
     quote: 'The style curation is top-notch. Highly recommended—each product feels premium, and the service kept me informed at every step.',
     rating: 5,
-    avatar: 'https://via.placeholder.com/80?text=M'
+    avatar: 'https://placehold.co/80x80/3F2A1D/F4D86C?text=M'
   }
 ];
 
@@ -233,7 +233,7 @@ async function renderTestimonials() {
     return `
       <article class="testimonial-item${index === 0 ? ' active' : ''}" data-id="${item.id}">
         <div class="testimonial-top">
-          <img class="testimonial-avatar" src="${item.avatar || 'https://via.placeholder.com/80?text=' + item.name.charAt(0)}" alt="${item.name} portrait" />
+          <img class="testimonial-avatar" src="${item.avatar || 'https://placehold.co/80x80/1F2937/F4D86C?text=' + item.name.charAt(0)}" alt="${item.name} portrait" />
           <div>
             <div class="testimonial-rating">${stars}</div>
             <span class="testimonial-name">${item.name}, ${item.location}</span>
@@ -499,7 +499,8 @@ function clearAllProductFilters() {
 }
 
 function productRailCard(product) {
-  return `<article class="rail-product-card"><img src="${product.image}" alt="${product.title}" /><div><p>${product.category}</p><h3>${product.title}</h3><strong>₹${Number(product.price).toLocaleString('en-IN')}</strong><button class="add-to-cart" type="button" data-product-id="${product.id}">Add to cart</button></div></article>`;
+  const detailUrl = `product.html?id=${encodeURIComponent(product.id)}`;
+  return `<article class="rail-product-card" data-product-id="${product.id}" tabindex="0" role="link" aria-label="View ${product.title}"><a class="rail-product-link" href="${detailUrl}" aria-label="View ${product.title} details"><img src="${product.image}" alt="${product.title}" /></a><div><p>${product.category}</p><h3><a class="rail-product-link" href="${detailUrl}">${product.title}</a></h3><strong>₹${Number(product.price).toLocaleString('en-IN')}</strong><button class="add-to-cart" type="button" data-product-id="${product.id}">Add to cart</button></div></article>`;
 }
 
 function renderHomeProductRails(products) {
@@ -704,8 +705,34 @@ function setupHeaderSearchSuggestions() {
 function setupNavDropdowns() {
   const navMenus = document.querySelectorAll('.nav-item-with-menu, .nav-dropdown');
 
+  const setMobilePanelState = (panel, isOpen) => {
+    if (window.innerWidth > 760) {
+      panel.style.removeProperty('display');
+      panel.style.removeProperty('grid-template-columns');
+      panel.style.removeProperty('width');
+      panel.style.removeProperty('max-width');
+      return;
+    }
+
+    panel.style.display = isOpen ? 'grid' : 'none';
+    panel.style.position = 'static';
+    panel.style.setProperty('grid-template-columns', '1fr', 'important');
+    panel.style.setProperty('width', '100%', 'important');
+    panel.style.setProperty('max-width', '100%', 'important');
+    panel.style.transform = 'none';
+    panel.parentElement.style.flexDirection = 'column';
+    panel.parentElement.style.alignItems = 'stretch';
+    panel.querySelectorAll(':scope > *').forEach(child => {
+      child.style.setProperty('grid-column', 'auto', 'important');
+    });
+  };
+
   const closeAllDropdowns = () => {
-    navMenus.forEach(menu => menu.classList.remove('is-open'));
+    navMenus.forEach(menu => {
+      menu.classList.remove('is-open');
+      const panel = menu.querySelector('.dropdown-menu');
+      if (panel) setMobilePanelState(panel, false);
+    });
   };
 
   navMenus.forEach(menu => {
@@ -717,6 +744,7 @@ function setupNavDropdowns() {
     const openMenu = () => {
       closeAllDropdowns();
       menu.classList.add('is-open');
+      setMobilePanelState(panel, true);
     };
 
     const toggleMenu = event => {
@@ -746,11 +774,6 @@ function setupNavDropdowns() {
     trigger?.addEventListener('click', toggleMenu);
     trigger?.addEventListener('focus', openMenu);
 
-    panel.querySelectorAll('.dropdown-item').forEach(item => {
-      item.addEventListener('mousedown', () => {
-        closeAllDropdowns();
-      });
-    });
   });
 
   document.addEventListener('click', event => {
@@ -779,6 +802,16 @@ function setupMobileNavigation() {
     });
   });
 
+  const resetHome = event => {
+    event.preventDefault();
+    nav.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    window.location.assign('index.html#top');
+  };
+
+  nav.querySelector('a[href="index.html#top"]')?.addEventListener('click', resetHome);
+  document.querySelector('.home-brand-link')?.addEventListener('click', resetHome);
+
   window.addEventListener('resize', () => {
     if (!window.matchMedia('(max-width: 760px)').matches) {
       nav.classList.remove('is-open');
@@ -788,6 +821,19 @@ function setupMobileNavigation() {
 }
 
 function setupStorefrontFilters() {
+  const closeMobileNavigation = () => {
+    if (!window.matchMedia('(max-width: 760px)').matches) return;
+    const nav = document.getElementById('primaryNav');
+    const toggle = document.getElementById('mobileNavToggle');
+    nav?.classList.remove('is-open');
+    toggle?.setAttribute('aria-expanded', 'false');
+    document.querySelectorAll('.nav-item-with-menu.is-open, .nav-dropdown.is-open').forEach(menu => {
+      menu.classList.remove('is-open');
+      const panel = menu.querySelector('.dropdown-menu');
+      panel?.style.setProperty('display', 'none');
+    });
+  };
+
   const filterToggle = document.getElementById('filterToggle');
   const filtersPanel = document.getElementById('filtersPanel');
   if (filterToggle && filtersPanel) {
@@ -824,12 +870,14 @@ function setupStorefrontFilters() {
         const audience = target.dataset.audience;
         updateFiltersFromAction('category', category, audience);
         hideAudienceSubmenu();
+        closeMobileNavigation();
         return;
       }
       const filterType = target.dataset.filterType;
       const filterValue = target.dataset.filter;
       if (!filterType || !filterValue) return;
       updateFiltersFromAction(filterType, filterValue);
+      closeMobileNavigation();
     });
   }
 
@@ -1005,12 +1053,12 @@ async function init() {
   document.addEventListener('click', event => {
     const button = event.target.closest('.add-to-cart');
     if (button) addToCart(visibleProducts.get(button.dataset.productId));
-    const card = event.target.closest('.product-card[data-product-id]');
+    const card = event.target.closest('.product-card[data-product-id], .rail-product-card[data-product-id]');
     if (card && !button) window.location.href = `product.html?id=${encodeURIComponent(card.dataset.productId)}`;
   });
 
   document.addEventListener('keydown', event => {
-    const card = event.target.closest('.product-card[data-product-id]');
+    const card = event.target.closest('.product-card[data-product-id], .rail-product-card[data-product-id]');
     if (card && (event.key === 'Enter' || event.key === ' ')) {
       event.preventDefault();
       window.location.href = `product.html?id=${encodeURIComponent(card.dataset.productId)}`;

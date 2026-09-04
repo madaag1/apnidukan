@@ -22,6 +22,8 @@ import {
   addDoc,
   updateDoc,
   deleteDoc
+  ,query
+  ,where
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -52,6 +54,8 @@ export {
   addDoc,
   updateDoc,
   deleteDoc,
+  query,
+  where,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,

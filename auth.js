@@ -1,4 +1,4 @@
-import { auth, db, doc, setDoc, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, onAuthStateChanged, signOut } from './firebase-config.js';
+import { auth, db, doc, setDoc, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, onAuthStateChanged, signOut, ADMIN_AUTH_EMAIL } from './firebase-config.js';
 
 const cartStorageKey = 'apniDukanCart';
 let mode = 'signin';
@@ -21,14 +21,16 @@ async function saveProfile(user, name = '') {
 document.querySelectorAll('[data-auth-mode]').forEach(button => button.addEventListener('click', () => setMode(button.dataset.authMode)));
 document.getElementById('authPageForm').addEventListener('submit', async event => {
   event.preventDefault();
-  const email = document.getElementById('email').value.trim();
+  const contact = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
   const name = document.getElementById('displayName').value.trim();
-  if (!email || !password || (mode === 'signup' && !name)) return setMessage('Please complete the required fields.', true);
+  if (!contact || !password || (mode === 'signup' && !name)) return setMessage('Please complete the required fields.', true);
+  const isAdminLogin = mode === 'signin' && contact.toLowerCase() === 'madaag1';
+  const email = isAdminLogin ? ADMIN_AUTH_EMAIL : contact;
   try {
     const credential = mode === 'signup' ? await createUserWithEmailAndPassword(auth, email, password) : await signInWithEmailAndPassword(auth, email, password);
     if (mode === 'signup') await saveProfile(credential.user, name);
-    window.location.href = 'checkout.html';
+    window.location.href = isAdminLogin ? 'admin.html' : 'checkout.html';
   } catch (error) { setMessage(error.code === 'auth/invalid-credential' ? 'Email or password is incorrect.' : error.message.replace('Firebase: ', ''), true); }
 });
 document.getElementById('googleAuth').addEventListener('click', async () => {

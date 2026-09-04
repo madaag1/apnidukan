@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My orders | Apni Dukaan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=15" />
+</head>
+<body>
+  <header class="simple-header"><a class="brand-link" href="index.html#top">APNI DUKAAN <span>Premium lifestyle store</span></a><nav class="legal-nav"><a href="index.html#top">Shop</a><a href="auth.html">Account</a></nav></header>
+  <main class="shop-page customer-orders-page">
+    <section class="page-heading"><p class="eyebrow">Your account</p><h1>My orders</h1><p>Track your orders and review delivery details in one place.</p></section>
+    <p id="customerOrdersMessage" class="form-message" role="status">Loading your orders...</p>
+    <section id="customerOrdersList" class="customer-orders-list" aria-live="polite"></section>
+  </main>
+  <script type="module" src="customer-orders.js?v=1"></script>
+</body>
+</html>

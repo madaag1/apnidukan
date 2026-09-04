@@ -3,25 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
   <meta name="description" content="Apni Dukaan is a premium lifestyle storefront with curated watches, footwear, apparel, sunglasses and easy WhatsApp ordering." />
   <title>Apni Dukaan | Luxury Lifestyle</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=12" />
 </head>
-<body>
+<body id="top">
   <header class="site-header">
     <div class="site-header-top">
-      <div class="brand brand-with-emblem">
+      <a class="brand brand-with-emblem home-brand-link" href="index.html#top" aria-label="Apni Dukaan home">
         <div id="logoContainer" class="logo-mark"></div>
         <div class="logo-copy">
           <p class="eyebrow">Apni Dukaan</p>
           <strong>Premium lifestyle store</strong>
         </div>
-      </div>
+      </a>
       <form id="headerSearchForm" class="search-bar" action="#collections" autocomplete="off">
-        <input id="headerSearchInput" type="search" placeholder="Search designer watches, footwear, electronics..." aria-label="Search Apni Dukaan" />
+        <input id="headerSearchInput" type="search" placeholder="Search products..." aria-label="Search Apni Dukaan" />
         <div id="headerSearchSuggestions" class="header-search-suggestions hidden" aria-live="polite"></div>
         <button type="submit">Search</button>
       </form>
@@ -35,7 +37,7 @@
       <span class="mobile-nav-toggle-label">Menu</span>
     </button>
     <nav class="primary-nav" id="primaryNav" aria-label="Main navigation">
-      <a href="index.html" class="nav-link">Home</a>
+      <a href="index.html#top" class="nav-link">Home</a>
       <div class="nav-dropdown nav-item-with-menu">
         <button class="nav-link dropdown-toggle" type="button">Categories</button>
         <div class="dropdown-menu" id="navDropdownMenu">
@@ -100,15 +102,15 @@
         <div class="deal-track" id="dealTrack">
           <article class="deal-slide deal-gold">
             <div class="deal-slide-copy"><p class="deal-kicker">FLASH DEAL</p><h2>Signature Sport Watch</h2><span>Refined everyday style with a premium leather strap.</span><div class="deal-price"><strong>₹2,499</strong><s>₹3,999</s><b>38% OFF</b></div><p class="deal-stock">Limited pieces available</p><a href="product.html?id=watch-sport-01">Shop this deal <span aria-hidden="true">→</span></a></div>
-            <div class="deal-product-image"><img src="https://via.placeholder.com/600x600?text=Sport+Watch" alt="Signature Sport Watch" /></div>
+            <div class="deal-product-image"><img src="https://placehold.co/600x600/111827/F4D86C?text=Sport+Watch" alt="Signature Sport Watch" /></div>
           </article>
           <article class="deal-slide deal-wine">
             <div class="deal-slide-copy"><p class="deal-kicker">BEST SELLER</p><h2>Urban Runner Sneakers</h2><span>Comfort-first city sneakers made for every day.</span><div class="deal-price"><strong>₹1,799</strong><s>₹2,999</s><b>40% OFF</b></div><p class="deal-stock">Fast-moving favourite</p><a href="product.html?id=sneaker-air-04">Shop this deal <span aria-hidden="true">→</span></a></div>
-            <div class="deal-product-image"><img src="https://via.placeholder.com/600x600?text=Urban+Sneakers" alt="Urban Runner Sneakers" /></div>
+            <div class="deal-product-image"><img src="https://placehold.co/600x600/3B1F2B/F4D86C?text=Urban+Sneakers" alt="Urban Runner Sneakers" /></div>
           </article>
           <article class="deal-slide deal-blue">
             <div class="deal-slide-copy"><p class="deal-kicker">MEMBER FAVOURITE</p><h2>Noise-Canceling Earbuds</h2><span>Rich sound, all-day comfort and a sleek finish.</span><div class="deal-price"><strong>₹2,199</strong><s>₹3,499</s><b>37% OFF</b></div><p class="deal-stock">Offer valid while stock lasts</p><a href="product.html?id=earbuds-pro-06">Shop this deal <span aria-hidden="true">→</span></a></div>
-            <div class="deal-product-image"><img src="https://via.placeholder.com/600x600?text=Premium+Earbuds" alt="Noise-Canceling Earbuds" /></div>
+            <div class="deal-product-image"><img src="https://placehold.co/600x600/12324A/F4D86C?text=Premium+Earbuds" alt="Noise-Canceling Earbuds" /></div>
           </article>
         </div>
         <div class="deal-indicators" id="dealIndicators" aria-label="Choose a deal"></div>
@@ -267,6 +269,7 @@
         <a class="footer-link" href="tel:+919999999999">+91 99999 99999</a>
         <a class="footer-link" href="sell-with-us.html">Sell with us</a>
         <a class="footer-link" href="policies.html">Returns & shipping</a>
+        <a class="footer-link" href="privacy.html">Privacy policy</a>
         <a class="footer-link" href="policies.html#legal">Legal & IP policy</a>
       </div>
       <div class="footer-card">
@@ -282,6 +285,6 @@
     <p class="footer-disclaimer">Apni Dukaan does not sell counterfeit or “clone” products. Products may be handmade, customised, thrifted/pre-owned, unbranded, or fulfilled by independent sellers. Images are illustrative only where stated; please read the product listing carefully. Brand names and marks belong to their respective owners; no affiliation is implied.</p>
   </footer>
 
-  <script type="module" src="script.js"></script>
+  <script type="module" src="script.js?v=12"></script>
 </body>
 </html>

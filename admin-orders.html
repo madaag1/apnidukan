@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orders | Apni Dukaan Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=13" />
+</head>
+<body class="admin-body orders-body">
+  <header class="admin-header orders-header">
+    <div class="admin-brand">
+      <div class="logo-mark admin-logo-mark" aria-hidden="true">AD</div>
+      <div>
+        <p class="eyebrow">Admin portal</p>
+        <h1>Order desk</h1>
+      </div>
+    </div>
+    <nav class="orders-nav" aria-label="Admin navigation">
+      <a class="button button-ghost" href="admin.html">Store manager</a>
+      <a class="button button-primary" href="index.html#top">View storefront</a>
+    </nav>
+  </header>
+
+  <main class="orders-main">
+    <section class="orders-hero">
+      <div>
+        <p class="eyebrow">Fulfilment workspace</p>
+        <h2>Orders at a glance.</h2>
+        <p>Review new orders, confirm delivery details and keep customers updated from one place.</p>
+      </div>
+      <button class="button button-secondary" id="refreshOrders" type="button">Refresh orders</button>
+    </section>
+
+    <section class="order-stats" aria-label="Order summary">
+      <article><span>All orders</span><strong id="allCount">0</strong></article>
+      <article><span>Pending</span><strong id="pendingCount">0</strong></article>
+      <article><span>Confirmed</span><strong id="confirmedCount">0</strong></article>
+      <article><span>Revenue</span><strong id="revenueTotal">₹0</strong></article>
+    </section>
+
+    <section class="orders-toolbar" aria-label="Order filters">
+      <label>Search orders<input id="orderSearch" type="search" placeholder="Order ID, customer or email" /></label>
+      <label>Status<select id="orderStatus"><option value="all">All statuses</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="packed">Packed</option><option value="shipped">Shipped</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option></select></label>
+    </section>
+
+    <p id="ordersMessage" class="orders-message" role="status">Loading orders...</p>
+    <section id="ordersList" class="orders-list" aria-live="polite"></section>
+  </main>
+
+  <script type="module" src="admin-orders.js?v=1"></script>
+</body>
+</html>

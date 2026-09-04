@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin login | Apni Dukaan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=14" />
+</head>
+<body class="admin-body">
+  <main class="admin-login-page">
+    <section class="admin-login-card">
+      <p class="eyebrow">Apni Dukaan</p>
+      <h1>Admin access</h1>
+      <p class="muted-copy">Sign in to manage products, orders and store settings.</p>
+      <form id="adminLoginForm" class="form-grid">
+        <label>Admin ID<input id="adminUsername" type="text" autocomplete="username" placeholder="madaag1" required /></label>
+        <label>Password<input id="adminPassword" type="password" autocomplete="current-password" required /></label>
+        <button class="button button-primary wide-button" type="submit">Sign in to admin</button>
+      </form>
+      <p id="adminLoginMessage" class="form-message" role="status"></p>
+      <a class="text-link" href="index.html#top">Back to storefront</a>
+    </section>
+  </main>
+  <script type="module" src="admin-login.js?v=1"></script>
+</body>
+</html>
