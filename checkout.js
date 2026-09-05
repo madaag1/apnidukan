@@ -72,8 +72,7 @@ async function loadStoreSettings() {
 }
 
 onAuthStateChanged(auth, user => {
-  if (!user) { window.location.replace('auth.html'); return; }
-  document.getElementById('email').value = user.email || '';
+  if (user) document.getElementById('email').value = user.email || '';
 });
 
 form.addEventListener('submit', async event => {
@@ -81,21 +80,20 @@ form.addEventListener('submit', async event => {
   const { cart, total } = render();
   if (!cart.length) { message.textContent = 'Your cart is empty.'; message.classList.add('is-error'); return; }
   const user = auth.currentUser;
-  if (!user) return;
   const shipping = Object.fromEntries(new FormData(form).entries());
   const paymentMethod = selectedPayment();
   if (paymentMethod === 'online' && !storeSettings.paymentQrData) { message.textContent = 'Online payment QR is not configured yet. Please choose Order on WhatsApp.'; message.classList.add('is-error'); return; }
   if (paymentMethod === 'online' && !paymentProof.files?.length) { message.textContent = 'Please upload your payment screenshot before confirming.'; message.classList.add('is-error'); return; }
   try {
     const proof = paymentMethod === 'online' ? await paymentProofData() : '';
-    const order = { customerId: user.uid, customerEmail: user.email || shipping.email, items: cart.map(({ id, title, price, quantity }) => ({ id, title, price, quantity })), shipping, total, paymentMethod, paymentProof: proof, status: 'pending', createdAt: new Date().toISOString() };
+    const order = { customerId: user?.uid || 'guest', customerEmail: user?.email || shipping.email, items: cart.map(({ id, title, price, quantity }) => ({ id, title, price, quantity })), shipping, total, paymentMethod, paymentProof: proof, status: 'pending', createdAt: new Date().toISOString() };
     const result = await addDoc(collection(db, 'orders'), order);
     localStorage.removeItem(key);
     message.classList.remove('is-error');
     message.textContent = `Order #${result.id.slice(0, 8).toUpperCase()} saved successfully.`;
     if (paymentMethod === 'whatsapp') window.location.href = whatsappUrl({ ...order, id: result.id }, shipping);
     form.reset();
-    document.getElementById('email').value = user.email || '';
+    if (user) document.getElementById('email').value = user.email || '';
     updatePaymentMode();
     render();
   } catch (error) {
