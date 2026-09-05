@@ -35,10 +35,36 @@ async function saveSettings() {
   toast('Store settings saved to Firebase.');
 }
 
-function mediaUrls() {
-  const entered = value('productImages').split(/[\n,]+/).map(url => url.trim()).filter(url => /^https?:\/\//i.test(url));
-  const main = value('productImage');
-  return [...new Set([main, ...entered].filter(Boolean))];
+function readImage(file, size = 900) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const image = new Image();
+      image.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const context = canvas.getContext('2d');
+        context.fillStyle = '#f4f4f4';
+        context.fillRect(0, 0, size, size);
+        const scale = Math.max(size / image.width, size / image.height);
+        const width = Math.round(image.width * scale);
+        const height = Math.round(image.height * scale);
+        context.drawImage(image, Math.round((size - width) / 2), Math.round((size - height) / 2), width, height);
+        resolve(canvas.toDataURL('image/jpeg', 0.82));
+      };
+      image.onerror = () => reject(new Error('Could not read the selected image.'));
+      image.src = reader.result;
+    };
+    reader.onerror = () => reject(new Error('Could not read the selected image.'));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function mediaImages() {
+  const files = [...(document.getElementById('productImageUpload')?.files || [])];
+  if (files.length > 6) throw new Error('Choose up to 6 images.');
+  return Promise.all(files.map(file => readImage(file)));
 }
 
 async function loadProducts() {
@@ -52,7 +78,7 @@ async function saveProduct() {
   const marketPrice = Number(value('productMarketPrice'));
   const qty = Number(value('productQty'));
   if (!title || !price || !marketPrice || !qty) return toast('Please complete title, prices and quantity.');
-  const images = mediaUrls();
+  const images = await mediaImages();
   const editingId = document.getElementById('productForm')?.dataset.editing || '';
   const existing = editingId ? (await loadProducts()).find(product => product.id === editingId) : null;
   const finalImages = images.length ? images : (existing?.images || [existing?.image || defaultImage]);
@@ -68,7 +94,6 @@ async function saveProduct() {
     qty,
     image: finalImages[0],
     images: finalImages,
-    video: value('productVideo'),
     updatedAt: Date.now()
   };
   if (editingId) await updateDoc(doc(db, 'products', editingId), payload);
