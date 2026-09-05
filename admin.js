@@ -97,6 +97,7 @@ const defaultSettings = {
   surfaceColor: '#ffffff',
   backgroundColor: '#050505',
   logoData: '',
+  paymentQrData: '',
   welcomeEnabled: false,
   welcomeMessage: '',
   welcomeMedia: '',
@@ -312,6 +313,7 @@ async function populateSettings() {
   document.getElementById('storeTagline').value = settings.storeTagline;
   document.getElementById('brandTextStyle').value = settings.brandTextStyle || 'classic';
   updateLogoPreview(settings.logoData || '');
+  updatePaymentQrPreview(settings.paymentQrData || '');
   updateWelcomePreview(settings.welcomeMedia || '');
   applyAdminTheme(settings);
 }
@@ -372,6 +374,14 @@ function readFileAsDataUrl(input) {
     reader.onload = () => resolve(reader.result || '');
     reader.readAsDataURL(file);
   });
+}
+
+function updatePaymentQrPreview(src) {
+  const preview = document.getElementById('paymentQrPreview');
+  if (!preview) return;
+  preview.src = src || '';
+  preview.style.display = src ? 'block' : 'none';
+  preview.dataset.source = src ? 'saved' : '';
 }
 
 // Firestore documents are capped at 1MB, and phone photos are often bigger than that
@@ -436,6 +446,8 @@ function setupEvents() {
     const welcomePreview = document.getElementById('welcomeMediaPreview');
     const existingSettings = await getSettings();
     const logoDataValue = logoPreview && logoPreview.dataset.source === 'file' ? logoPreview.src : existingSettings.logoData;
+    const paymentQrPreview = document.getElementById('paymentQrPreview');
+    const paymentQrDataValue = paymentQrPreview && paymentQrPreview.dataset.source === 'file' ? paymentQrPreview.src : existingSettings.paymentQrData;
     const welcomeMediaValue = welcomePreview && welcomePreview.dataset.media ? welcomePreview.dataset.media : existingSettings.welcomeMedia;
     const settings = {
       whatsappNumber: document.getElementById('whatsappNumber').value.trim() || '919999999999',
@@ -449,6 +461,7 @@ function setupEvents() {
       surfaceColor: document.getElementById('surfaceColor').value || '#ffffff',
       backgroundColor: document.getElementById('backgroundColor').value || '#050505',
       logoData: logoDataValue || '',
+      paymentQrData: paymentQrDataValue || '',
       welcomeEnabled: document.getElementById('welcomeEnabled').checked,
       welcomeMessage: document.getElementById('welcomeMessage').value.trim(),
       welcomeMedia: welcomeMediaValue || '',
@@ -474,6 +487,20 @@ function setupEvents() {
       preview.style.display = 'block';
     } catch (error) {
       showToast(error.message || 'Could not process that logo image.');
+    }
+  });
+
+  document.getElementById('paymentQrUpload').addEventListener('change', async event => {
+    const preview = document.getElementById('paymentQrPreview');
+    if (!preview) return;
+    try {
+      const compressed = await readImageAsCompressedDataUrl(event.target, 700, 0.86);
+      if (!compressed) return;
+      preview.dataset.source = 'file';
+      preview.src = compressed;
+      preview.style.display = 'block';
+    } catch (error) {
+      showToast(error.message || 'Could not process that QR image.');
     }
   });
 

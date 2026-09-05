@@ -3537,6 +3537,18 @@ body {
 .payment-option:hover { border-color: rgba(244,216,108,.5); background: rgba(244,216,108,.06); }
 .payment-option:has(input:checked) { border-color: rgba(244,216,108,.7); background: rgba(244,216,108,.1); color: #fff; }
 .payment-option input { accent-color: #d9b14a; }
+.payment-option span { display: grid; gap: 4px; }
+.payment-option small, .payment-proof-field small { color: var(--muted); font-weight: 400; }
+.payment-option-disabled { cursor: not-allowed; opacity: .55; }
+.online-payment-panel { margin: 18px 0; padding: 18px; border: 1px solid var(--border); border-radius: 16px; background: rgba(0,0,0,.16); }
+.payment-panel-heading { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
+.payment-panel-heading h3 { margin: 5px 0 16px; }
+.payment-status { color: var(--accent); font-size: .78rem; font-weight: 800; letter-spacing: .12em; }
+.payment-qr { width: min(240px, 100%); aspect-ratio: 1; margin: 0 auto 18px; object-fit: contain; background: #fff; border-radius: 10px; }
+.payment-qr-state { padding: 22px; color: var(--muted); text-align: center; }
+.payment-proof-field { display: grid; gap: 8px; }
+.payment-proof-field input { padding: 10px; }
+.whatsapp-order-hint { padding: 14px; border: 1px solid rgba(37,211,102,.25); border-radius: 12px; color: #a9e8bb; background: rgba(37,211,102,.08); }
 .checkout-items { max-height: 280px; overflow: auto; }
 .checkout-item { font-size: .88rem; }
 .empty-state { border: 1px dashed rgba(244,216,108,.28); border-radius: 18px; background: rgba(244,216,108,.04); }
