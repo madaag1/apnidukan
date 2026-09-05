@@ -1,3 +1,46 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Checkout | Apni Dukaan</title><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" /><link rel="stylesheet" href="styles.css?v=2" /></head>
-<body><header class="simple-header"><a class="brand-link" href="index.html">APNI DUKAAN <span>Premium lifestyle store</span></a><a class="header-link" href="cart.html">Back to cart</a></header><main class="shop-page"><div class="page-heading"><p class="eyebrow">Secure checkout</p><h1>Delivery details</h1><p>Choose online payment with our QR code or order directly on WhatsApp with executive assistance.</p></div><div class="checkout-layout"><form id="checkoutForm" class="checkout-form"><h2>Contact & delivery</h2><div class="form-grid"><label>Full name<input id="fullName" required autocomplete="name" /></label><label>Mobile number<input id="phone" type="tel" required autocomplete="tel" /></label><label class="full-field">Email address<input id="email" type="email" required autocomplete="email" /></label><label class="full-field">Address<input id="address" required autocomplete="street-address" /></label><label>City<input id="city" required autocomplete="address-level2" /></label><label>PIN code<input id="postalCode" required inputmode="numeric" autocomplete="postal-code" /></label></div><h2>Choose how to order</h2><label class="payment-option payment-option-disabled"><input type="radio" name="payment" value="cod" disabled /> <span><strong>Cash on delivery</strong><small>Not available for your PIN code right now.</small></span></label><label class="payment-option"><input type="radio" name="payment" value="online" checked /> <span><strong>Pay online</strong><small>Pay securely using our QR code.</small></span></label><label class="payment-option"><input type="radio" name="payment" value="whatsapp" /> <span><strong>Order on WhatsApp</strong><small>Get assistance from our executive.</small></span></label><section id="onlinePaymentPanel" class="online-payment-panel"><div class="payment-panel-heading"><div><p class="eyebrow">Online payment</p><h3>Scan and pay <span id="paymentAmount">₹0</span></h3></div><span class="payment-status">UPI</span></div><div id="paymentQrState" class="payment-qr-state">QR code will appear here after the admin adds it.</div><img id="paymentQr" class="payment-qr" alt="Scan this QR code to pay" hidden /><label class="payment-proof-field">Upload payment screenshot<input id="paymentProof" type="file" accept="image/*" /><small>Your screenshot will be saved with this order for verification.</small></label></section><p id="whatsappOrderHint" class="whatsapp-order-hint" hidden>Your address, order total and product links will be sent to our WhatsApp executive.</p><p id="checkoutMessage" class="form-message" role="status"></p><button id="checkoutSubmit" class="button button-primary wide-button" type="submit">Done with payment</button></form><aside class="order-summary"><h2>Your order</h2><div id="checkoutItems" class="checkout-items"></div><div class="summary-total"><span>Total</span><strong id="checkoutTotal">₹0</strong></div><p class="muted-copy">Your order is saved securely and our team will contact you to confirm it.</p></aside></div></main><script type="module" src="checkout.js?v=1"></script></body></html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout | Apni Dukaan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=4" />
+</head>
+<body>
+  <header class="simple-header"><a class="brand-link" href="index.html">APNI DUKAAN <span>Premium lifestyle store</span></a><a class="header-link" href="cart.html">Back to cart</a></header>
+  <main class="shop-page">
+    <div class="page-heading"><p class="eyebrow">Secure checkout</p><h1>Delivery details</h1><p>Choose online payment with our QR code or place an easy WhatsApp order with executive assistance.</p></div>
+    <div class="checkout-layout">
+      <form id="checkoutForm" class="checkout-form">
+        <h2>Contact & delivery</h2>
+        <div class="form-grid">
+          <label>Full name<input id="fullName" required autocomplete="name" /></label>
+          <label>Mobile number<input id="phone" type="tel" required autocomplete="tel" /></label>
+          <label class="full-field">Email address<input id="email" type="email" required autocomplete="email" /></label>
+          <label class="full-field">Address<input id="address" required autocomplete="street-address" /></label>
+          <label>City<input id="city" required autocomplete="address-level2" /></label>
+          <label>PIN code<input id="postalCode" required inputmode="numeric" autocomplete="postal-code" /></label>
+        </div>
+        <h2>Choose how to order</h2>
+        <label class="payment-option payment-option-disabled"><input type="radio" name="payment" value="cod" disabled /> <span><strong>Cash on delivery</strong><small>Not available for your PIN code right now.</small></span></label>
+        <label class="payment-option"><input type="radio" name="payment" value="online" checked /> <span><strong>Pay online</strong><small>Pay securely using our QR code.</small></span></label>
+        <label class="payment-option"><input type="radio" name="payment" value="whatsapp" /> <span><strong>Easy order via WhatsApp</strong><small>Send your address and selected products to our executive.</small></span></label>
+        <section id="onlinePaymentPanel" class="online-payment-panel">
+          <div class="payment-panel-heading"><div><p class="eyebrow">Online payment</p><h3>Scan and pay <span id="paymentAmount">₹0</span></h3></div><span class="payment-status">UPI</span></div>
+          <div id="paymentQrState" class="payment-qr-state">QR code will appear here after the admin adds it.</div>
+          <img id="paymentQr" class="payment-qr" alt="Scan this QR code to pay" hidden />
+          <label class="payment-proof-field">Upload payment screenshot<input id="paymentProof" type="file" accept="image/*" /><small>Your screenshot will be saved with this order for verification.</small></label>
+        </section>
+        <p id="whatsappOrderHint" class="whatsapp-order-hint" hidden>Your address, order total and product links will be sent to our WhatsApp executive.</p>
+        <p id="checkoutMessage" class="form-message" role="status"></p>
+        <button id="checkoutSubmit" class="button button-primary wide-button" type="submit">Done with payment</button>
+      </form>
+      <aside class="order-summary"><h2>Your order</h2><div id="checkoutItems" class="checkout-items"></div><div class="summary-total"><span>Total</span><strong id="checkoutTotal">₹0</strong></div><p class="muted-copy">Your order is saved securely and our team will contact you to confirm it.</p></aside>
+    </div>
+  </main>
+  <script type="module" src="checkout.js?v=2"></script>
+</body>
+</html>

@@ -23,7 +23,7 @@ function render() {
 }
 
 function selectedPayment() { return document.querySelector('input[name="payment"]:checked')?.value || 'online'; }
-function updatePaymentMode() { const online = selectedPayment() === 'online'; onlinePanel.hidden = !online; whatsappHint.hidden = online; submitButton.textContent = online ? 'Done with payment' : 'Order on WhatsApp'; }
+function updatePaymentMode() { const online = selectedPayment() === 'online'; onlinePanel.hidden = !online; whatsappHint.hidden = online; submitButton.textContent = online ? 'Done with payment' : 'Send order to WhatsApp'; }
 
 function paymentProofData() {
   return new Promise((resolve, reject) => {
@@ -52,8 +52,9 @@ function paymentProofData() {
 
 function whatsappUrl(order, customer) {
   const phone = String(storeSettings.whatsappNumber || '').replace(/[^0-9]/g, '');
-  const lines = [`Hello Apni Dukaan, I want to place an order.`, `Customer: ${customer.fullName}`, `Phone: ${customer.phone}`, `Email: ${customer.email}`, `Address: ${customer.address}, ${customer.city} - ${customer.postalCode}`, `Total: ${format(order.total)}`, `Order ID: ${order.id.slice(0, 8).toUpperCase()}`, '', 'Products:'];
-  order.items.forEach(item => lines.push(`- ${item.title} x ${item.quantity}: ${window.location.origin}/product.html?id=${encodeURIComponent(item.id)}`));
+  const lines = [`*New Apni Dukaan WhatsApp Order*`, `Order ID: ${order.id.slice(0, 8).toUpperCase()}`, '', `*Customer details*`, `Name: ${customer.fullName}`, `Phone: ${customer.phone}`, `Email: ${customer.email}`, `Address: ${customer.address}, ${customer.city} - ${customer.postalCode}`, '', '*Products selected*'];
+  order.items.forEach(item => lines.push(`- ${item.title} x ${item.quantity} - ${window.location.origin}/product.html?id=${encodeURIComponent(item.id)}`));
+  lines.push('', `*Total: ${format(order.total)}*`, 'Please help me complete this order.');
   return `https://wa.me/${phone}?text=${encodeURIComponent(lines.join('\n'))}`;
 }
 
