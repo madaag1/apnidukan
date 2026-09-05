@@ -17,7 +17,7 @@
         "headers": [{"key": "Cache-Control", "value": "no-cache, no-store, must-revalidate"}]
       }
     ],
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**", "**/*.pdf"],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**", "**/*.pdf", "**/*.zip", "**/*.mp4", "**/*.mov", "**/*.psd", "**/.git/**"],
     "cleanUrls": true
   }
 }
