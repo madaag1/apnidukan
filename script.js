@@ -182,6 +182,14 @@ async function loadProducts() {
   return products;
 }
 
+async function loadProductsSafe() {
+  try {
+    return await loadProducts();
+  } catch (error) {
+    console.warn('Failed to load products from Firestore:', error.message);
+    return defaultProducts;
+  }
+}
 async function loadSettings() {
   const snap = await getDoc(settingsDocRef);
   if (!snap.exists()) return { ...defaultSettings };
@@ -438,39 +446,39 @@ async function renderProducts() {
     return;
   }
 
-  productGrid.innerHTML = products.map(product => {
-    const discount = product.marketPrice > product.price ? Math.round(100 - (product.price / product.marketPrice) * 100) : 0;
-    const rating = Number(product.rating || 4.5).toFixed(1);
-    const reviewCount = Number(product.reviewCount || Math.max(24, product.qty * 17)).toLocaleString('en-IN');
-    const boughtCount = Number(product.boughtCount || Math.max(12, product.qty * 4)).toLocaleString('en-IN');
-    return `
-      <article class="product-card" data-product-id="${product.id}" tabindex="0" role="link" aria-label="View ${product.title}">
-        <div class="product-image-wrap">
-          <img src="${product.image}" alt="${product.title}" />
-        </div>
-        <div class="product-info">
-          <div class="product-copy">
-            <p class="product-sponsored">Sponsored <span aria-hidden="true">i</span></p>
-            <p class="product-brand">${product.brand || product.category}</p>
-            <h3>${product.title}</h3>
-            <p class="product-summary">${product.description}</p>
-            <p class="product-rating"><strong>${rating}</strong> <span class="rating-stars" aria-label="${rating} out of 5 stars">★★★★★</span> <a href="#feedback">(${reviewCount})</a></p>
-            <p class="product-bought">${boughtCount}+ bought in past month</p>
+    productGrid.innerHTML = products.map(product => {
+      const discount = product.marketPrice > product.price ? Math.round(100 - (product.price / product.marketPrice) * 100) : 0;
+      const rating = Number(product.rating || 4.5).toFixed(1);
+      const reviewCount = Number(product.reviewCount || Math.max(24, product.qty * 17)).toLocaleString('en-IN');
+      const boughtCount = Number(product.boughtCount || Math.max(12, product.qty * 4)).toLocaleString('en-IN');
+      return `
+        <article class="product-card" data-product-id="${product.id}" tabindex="0" role="link" aria-label="View ${product.title}">
+          <div class="product-image-wrap">
+            <img src="${product.image}" alt="${product.title}" />
           </div>
-          <div class="product-bottom">
-            <div class="product-pricing">
-              <span class="product-price">₹${Number(product.price).toLocaleString()}</span>
-              ${Number(product.marketPrice) > Number(product.price) ? `<span class="product-market">₹${Number(product.marketPrice).toLocaleString()}</span>` : ''}
-              ${discount ? `<span class="product-discount">Save ${discount}%</span>` : ''}
+          <div class="product-info">
+            <div class="product-copy">
+              <p class="product-sponsored">Sponsored <span aria-hidden="true">i</span></p>
+              <p class="product-brand">${product.brand || product.category}</p>
+              <h3>${product.title}</h3>
+              <p class="product-summary">${product.description}</p>
+              <p class="product-rating"><strong>${rating}</strong> <span class="rating-stars" aria-label="${rating} out of 5 stars">★★★★★</span> <a href="#feedback">(${reviewCount})</a></p>
+              <p class="product-bought">${boughtCount}+ bought in past month</p>
             </div>
-            <p class="product-delivery">FREE delivery <strong>Tue, 1 Sept</strong></p>
-            <div class="product-actions">
-              <button class="button button-primary add-to-cart" type="button" data-product-id="${product.id}">Add to cart</button>
+            <div class="product-bottom">
+              <div class="product-pricing">
+                <span class="product-price">₹${Number(product.price).toLocaleString()}</span>
+                ${Number(product.marketPrice) > Number(product.price) ? `<span class="product-market">₹${Number(product.marketPrice).toLocaleString()}</span>` : ''}
+                ${discount ? `<span class="product-discount">Save ${discount}%</span>` : ''}
+              </div>
+              <p class="product-delivery">FREE delivery <strong>Tue, 1 Sept</strong></p>
+              <div class="product-actions">
+                <button class="button button-primary add-to-cart" type="button" data-product-id="${product.id}">Add to cart</button>
+              </div>
             </div>
           </div>
-        </div>
-      </article>
-    `;
+        </article>
+      `;
   }).join('');
 }
 
@@ -516,9 +524,13 @@ function clearAllProductFilters() {
 
 function productRailCard(product) {
   const detailUrl = `product.html?id=${encodeURIComponent(product.id)}`;
-  return `<article class="rail-product-card" data-product-id="${product.id}" tabindex="0" role="link" aria-label="View ${product.title}"><a class="rail-product-link" href="${detailUrl}" aria-label="View ${product.title} details"><img src="${product.image}" alt="${product.title}" /></a><div><p>${product.category}</p><h3><a class="rail-product-link" href="${detailUrl}">${product.title}</a></h3><strong>₹${Number(product.price).toLocaleString('en-IN')}</strong><button class="add-to-cart" type="button" data-product-id="${product.id}">Add to cart</button></div></article>`;
+  const escapeHtml = v => String(v ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  const fallbackImg = 'https://via.placeholder.com/600x600/111827/F4D86C?text=Product';
+  const imgSrc = escapeHtml(product.image || fallbackImg);
+  const title = escapeHtml(product.title);
+  const category = escapeHtml(product.category);
+  return `<article class="rail-product-card" data-product-id="${product.id}" tabindex="0" role="link" aria-label="View ${title}"><a class="rail-product-link" href="${detailUrl}" aria-label="View ${title} details"><img src="${imgSrc}" alt="${title}" onerror="this.src='${fallbackImg}'" /></a><div><p>${category}</p><h3><a class="rail-product-link" href="${detailUrl}">${title}</a></h3><strong>₹${Number(product.price).toLocaleString('en-IN')}</strong><button class="add-to-cart" type="button" data-product-id="${product.id}">Add to cart</button></div></article>`;
 }
-
 function renderHomeProductRails(products) {
   const recentIds = getRecentProductIds();
   const recent = recentIds.map(id => products.find(product => product.id === id)).filter(Boolean);
@@ -903,7 +915,6 @@ function setupStorefrontFilters() {
       hideAudienceSubmenu();
     });
   }
-
   const searchForm = document.querySelector('.search-bar');
   if (searchForm) {
     searchForm.addEventListener('submit', event => {

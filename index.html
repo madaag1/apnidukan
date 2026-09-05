@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=12" />
+  <link rel="stylesheet" href="styles.css?v=17" />
 </head>
 <body id="top">
   <header class="site-header">
@@ -29,12 +29,22 @@
       </form>
       <div class="header-actions">
         <a class="header-link" id="accountLink" href="auth.html">Sign in</a>
-        <a class="header-link header-cart" href="cart.html">Cart <span class="cart-count" data-cart-count>0</span></a>
+        <a class="header-link header-cart" href="cart.html" aria-label="Cart">
+          <span class="cart-icon" aria-hidden="true">
+            <svg viewBox="0 0 32 28" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 3h4l3.2 14.1a2 2 0 0 0 2 1.6h11.9a2 2 0 0 0 1.9-1.4L28 8H8" />
+              <circle cx="12" cy="24" r="1.6" fill="currentColor" stroke="none" />
+              <circle cx="24" cy="24" r="1.6" fill="currentColor" stroke="none" />
+            </svg>
+            <span class="cart-count" data-cart-count>0</span>
+          </span>
+          <span class="cart-label">Cart</span>
+        </a>
       </div>
     </div>
     <button class="mobile-nav-toggle" id="mobileNavToggle" type="button" aria-expanded="false" aria-controls="primaryNav">
-      <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
-      <span class="mobile-nav-toggle-label">Menu</span>
+      <span class="mobile-nav-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span class="mobile-nav-toggle-label">All</span>
     </button>
     <nav class="primary-nav" id="primaryNav" aria-label="Main navigation">
       <a href="index.html#top" class="nav-link">Home</a>
@@ -285,6 +295,6 @@
     <p class="footer-disclaimer">Apni Dukaan does not sell counterfeit or “clone” products. Products may be handmade, customised, thrifted/pre-owned, unbranded, or fulfilled by independent sellers. Images are illustrative only where stated; please read the product listing carefully. Brand names and marks belong to their respective owners; no affiliation is implied.</p>
   </footer>
 
-  <script type="module" src="script.js?v=14"></script>
+  <script type="module" src="script.js?v=15"></script>
 </body>
 </html>
