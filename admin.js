@@ -359,8 +359,9 @@ function showToast(message) {
   const toast = document.createElement('div');
   toast.className = 'toast-message';
   toast.textContent = message;
+  toast.setAttribute('role', 'status');
+  toast.setAttribute('aria-live', 'polite');
   document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 2800);
 }
 
 function readFileAsDataUrl(input) {
