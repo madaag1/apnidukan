@@ -197,7 +197,10 @@
             Quantity Available
             <input type="number" id="productQty" placeholder="25" required />
           </label>
-          <label class="span-full">Product image URLs (multiple, one per line)<textarea id="productImages" rows="3" placeholder="https://example.com/product-1.jpg&#10;https://example.com/product-2.jpg"></textarea><small class="field-help">Free plan: use public image URLs. The first image is the main image.</small></label><label>Product video URL (optional)<input type="url" id="productVideo" placeholder="https://example.com/product.mp4" /></label>
+          <label>
+            Product image
+            <input type="file" id="productImageUpload" accept="image/*" />
+          </label>
           <label>
             Image URL (optional)
             <input type="url" id="productImage" placeholder="https://via.placeholder.com/400" />
@@ -293,6 +296,6 @@
     <p>Store data is saved locally in your browser. Open this page anytime to update products, discount coupons, social links, and support information.</p>
   </footer>
 
-  <script type="module" src="admin-firebase.js?v=20260905-free"></script>
+  <script src="admin.js"></script>
 </body>
 </html>
