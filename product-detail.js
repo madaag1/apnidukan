@@ -45,7 +45,7 @@ function renderDetail(product) {
   const images = [product.image, ...(Array.isArray(product.images) ? product.images : [])].filter(Boolean);
   detail.innerHTML = `
     <div class="product-gallery">
-      <div class="product-main-image"><img id="productMainImage" src="${escapeHtml(images[0])}" alt="${escapeHtml(product.title)}" /></div>
+      <div class="product-main-image">${product.video ? `<video controls playsinline preload="metadata" poster="${escapeHtml(images[0] || '')}"><source src="${escapeHtml(product.video)}" /></video>` : `<img id="productMainImage" src="${escapeHtml(images[0])}" alt="${escapeHtml(product.title)}" />`}</div>
       <div class="product-thumbnails" aria-label="Product images">
         ${images.map((image, index) => `<button class="product-thumbnail${index === 0 ? ' is-active' : ''}" type="button" data-image="${escapeHtml(image)}"><img src="${escapeHtml(image)}" alt="View ${escapeHtml(product.title)} image ${index + 1}" /></button>`).join('')}
       </div>
@@ -75,7 +75,9 @@ function renderDetail(product) {
     window.location.href = 'checkout.html';
   });
   detail.querySelectorAll('.product-thumbnail').forEach(button => button.addEventListener('click', () => {
-    document.getElementById('productMainImage').src = button.dataset.image;
+    const mainImage = document.getElementById('productMainImage');
+    if (!mainImage) return;
+    mainImage.src = button.dataset.image;
     detail.querySelectorAll('.product-thumbnail').forEach(item => item.classList.remove('is-active'));
     button.classList.add('is-active');
   }));
