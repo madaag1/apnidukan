@@ -293,10 +293,26 @@ async function applyStoreSettings() {
   if (supportWhatsAppLink) {
     supportWhatsAppLink.href = `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent('Hello Apni Dukaan, I need support.')}`;
   }
-  const emailText = document.querySelector('.support-panel p:nth-of-type(2)');
-  if (emailText) emailText.textContent = `Email: ${settings.supportEmail}`;
-  const phoneText = document.querySelector('.support-panel p:nth-of-type(3)');
-  if (phoneText) phoneText.textContent = `Phone: ${settings.supportPhone}`;
+  const emailLink = document.querySelector('.support-contact-card[href^="mailto:"]');
+  if (emailLink) {
+    emailLink.href = `mailto:${settings.supportEmail}`;
+    const emailLabel = emailLink.querySelector('strong');
+    if (emailLabel) emailLabel.textContent = settings.supportEmail;
+  }
+  const phoneLink = document.querySelector('.support-contact-card[href^="tel:"]');
+  if (phoneLink) {
+    phoneLink.href = `tel:${settings.supportPhone.replace(/[^\d+]/g, '')}`;
+    const phoneLabel = phoneLink.querySelector('strong');
+    if (phoneLabel) phoneLabel.textContent = settings.supportPhone;
+  }
+  document.querySelectorAll('.footer-link[href^="mailto:"]').forEach(link => {
+    link.href = `mailto:${settings.supportEmail}`;
+    link.textContent = settings.supportEmail;
+  });
+  document.querySelectorAll('.footer-link[href^="tel:"]').forEach(link => {
+    link.href = `tel:${settings.supportPhone.replace(/[^\d+]/g, '')}`;
+    link.textContent = settings.supportPhone;
+  });
   const tagline = document.querySelector('.hero-copy p');
   if (tagline) tagline.textContent = settings.storeTagline;
 

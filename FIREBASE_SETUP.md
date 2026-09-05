@@ -11,3 +11,7 @@ The website now uses Firebase Authentication. Complete these Console steps once 
 The legacy `config/adminCredentials` Firestore document is no longer used. It is intentionally denied by the new rules and should be deleted manually from Firestore after confirming the new admin login works.
 
 Do not add passwords to the source code or to Firestore.
+
+## Production data backups
+
+Firestore data is not backed up by Git. Before publishing rules, deleting data, or releasing a database-related change, create and verify a Firestore export from the Firebase/Google Cloud console or with the Firebase CLI. Store it in a private location outside this repository and retain daily backups for at least 30 days. Do not commit exports or service-account keys. See `COLLABORATION.md` for the two-user Git workflow and recovery steps.

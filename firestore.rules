@@ -26,6 +26,10 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    match /featurePages/{pageId} {
+      allow read, write: if isAdmin();
+    }
+
     match /coupons/{couponId} {
       allow read, write: if isAdmin();
     }
