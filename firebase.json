@@ -1,9 +1,22 @@
 {
+  "storage": {
+    "rules": "storage.rules"
+  },
   "firestore": {
     "rules": "firestore.rules"
   },
   "hosting": {
     "public": ".",
+    "headers": [
+      {
+        "source": "**/*.html",
+        "headers": [{"key": "Cache-Control", "value": "no-cache, no-store, must-revalidate"}]
+      },
+      {
+        "source": "admin.js",
+        "headers": [{"key": "Cache-Control", "value": "no-cache, no-store, must-revalidate"}]
+      }
+    ],
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**", "**/*.pdf"],
     "cleanUrls": true
   }
