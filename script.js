@@ -289,7 +289,7 @@ async function applyStoreSettings() {
 
   const footerWhatsAppLink = document.querySelector('.footer-card a[href*="wa.me"]');
   if (footerWhatsAppLink) footerWhatsAppLink.href = `https://wa.me/${settings.whatsappNumber}`;
-  const supportWhatsAppLink = document.querySelector('.support-panel .button-secondary');
+  const supportWhatsAppLink = document.querySelector('.support-section a[href*="wa.me"]');
   if (supportWhatsAppLink) {
     supportWhatsAppLink.href = `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent('Hello Apni Dukaan, I need support.')}`;
   }
